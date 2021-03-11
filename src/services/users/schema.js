@@ -35,6 +35,7 @@ const UserSchema = new Schema(
     documentId: { type: String },
     refreshTokens: [],
     googleId: { type: String },
+    reviews: [{ review: { type: String }, rate: { type: Number } }],
   },
   { timestamps: true }
 );

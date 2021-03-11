@@ -17,6 +17,8 @@ const {
   logOutFromAllDevices,
   userRefreshToken,
   googleAuth,
+  cloudMulter,
+  addProfilePicture,
 } = require("../../controllers/userControllers");
 
 router.get("/", authorizeUser, adminOnly, getAllUsers);
@@ -43,6 +45,13 @@ router.get(
 );
 
 router.get("/googleRedirect", passport.authenticate("google"), googleAuth);
+
+router.post(
+  "/addProfilePic",
+  authorizeUser,
+  cloudMulter.single("picture"),
+  addProfilePicture
+);
 
 router.get("/:userId", authorizeUser, getUserById);
 module.exports = router;

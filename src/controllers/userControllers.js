@@ -1,6 +1,19 @@
 const UserModel = require("../services/users/schema");
 const { authenticateUser } = require("../utils/auth");
 const { refreshToken } = require("../utils/auth");
+const multer = require("multer");
+const cloudinary = require("../utils/cloudinaryConfig");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const mongoose = require("mongoose");
+
+const cloudStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "profile",
+  },
+});
+
+const cloudMulter = multer({ storage: cloudStorage });
 
 const getAllUsers = async (req, res, next) => {
   try {
@@ -188,6 +201,21 @@ const googleAuth = async (req, res, next) => {
   }
 };
 
+const addProfilePicture = async (req, res, next) => {
+  try {
+    const user = await UserModel.findById(
+      mongoose.Types.ObjectId(req.user._id)
+    );
+
+    await user.updateOne({ image: req.file.path });
+
+    res.status(201).send(user);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUser,
@@ -200,4 +228,6 @@ module.exports = {
   logOutFromAllDevices,
   userRefreshToken,
   googleAuth,
+  cloudMulter,
+  addProfilePicture,
 };
