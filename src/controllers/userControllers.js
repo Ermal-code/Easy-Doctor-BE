@@ -203,13 +203,9 @@ const googleAuth = async (req, res, next) => {
 
 const addProfilePicture = async (req, res, next) => {
   try {
-    const user = await UserModel.findById(
-      mongoose.Types.ObjectId(req.user._id)
-    );
+    await req.user.updateOne({ image: req.file.path });
 
-    await user.updateOne({ image: req.file.path });
-
-    res.status(201).send(user);
+    res.status(201).send(req.user);
   } catch (error) {
     console.log(error);
     next(error);
