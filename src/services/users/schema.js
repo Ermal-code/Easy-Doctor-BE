@@ -3,16 +3,16 @@ const bcrypt = require("bcryptjs");
 
 const UserSchema = new Schema(
   {
-    name: { type: String, require: true },
+    name: { type: String, required: true },
     surname: { type: String },
     image: {
       type: String,
-      require: true,
+      required: true,
       default: `https://lh3.googleusercontent.com/proxy/GjZL2aHCfzXqLnTGNtp9ZyY7DmRmOI7qe0jD8w0ugk5gNLvH8w3j2rpy4CGTMe8t2Qnhqo62y5d2lnUzLTYG2IEt4pgNmQ0PgJJHmnia_Tr0RdCFJC8q9Jo9QRKrxWw`,
     },
     email: {
       type: String,
-      require: "Email is required",
+      required: "Email is required",
       trim: true,
       lowercase: true,
       match: [
@@ -40,14 +40,10 @@ const UserSchema = new Schema(
     website: { type: String },
     // education: {},
     // experience: {},
-    reviews: [
-      {
-        user: { type: Schema.Types.ObjectId, ref: "User" },
-        review: { type: String },
-      },
-    ],
+
     rating: [
       {
+        _id: false,
         user: { type: Schema.Types.ObjectId },
         rate: { type: Number },
       },

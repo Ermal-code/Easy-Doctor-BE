@@ -224,6 +224,41 @@ const addProfilePicture = async (req, res, next) => {
   }
 };
 
+const addRating = async (req, res, next) => {
+  try {
+    const ratingExists = await UserModel.findOne({
+      _id: req.params.userId,
+      "rating.user": req.user._id,
+    });
+    console.log(ratingExists);
+    if (ratingExists) {
+      const modifyRating = await UserModel.findOneAndUpdate(
+        {
+          _id: req.params.userId,
+          "rating.user": req.user._id,
+        },
+        {
+          "rating.$.rate": req.body.rate,
+        },
+        { runValidators: true, new: true }
+      );
+      res.status(200).send(modifyRating);
+    } else {
+      const newRating = await UserModel.findByIdAndUpdate(
+        req.params.userId,
+        {
+          $push: { rating: { ...req.body, user: req.user._id } },
+        },
+        { runValidators: true, new: true }
+      );
+      res.status(201).send(newRating);
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 module.exports = {
   getAllUsers,
   getUser,
@@ -239,4 +274,5 @@ module.exports = {
   cloudMulter,
   addProfilePicture,
   getDoctorsAndClinics,
+  addRating,
 };

@@ -20,6 +20,7 @@ const {
   cloudMulter,
   addProfilePicture,
   getDoctorsAndClinics,
+  addRating,
 } = require("../../controllers/userControllers");
 
 router.get("/", authorizeUser, adminOnly, getAllUsers);
@@ -55,6 +56,8 @@ router.post(
   cloudMulter.single("picture"),
   addProfilePicture
 );
+
+router.post("/:userId/addRating", authorizeUser, addRating);
 
 router.get("/:userId", authorizeUser, getUserById);
 module.exports = router;
