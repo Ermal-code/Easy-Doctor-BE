@@ -51,6 +51,19 @@ const getUserById = async (req, res, next) => {
   }
 };
 
+const getDoctorsAndClinics = async (req, res, next) => {
+  try {
+    const users = await UserModel.find({
+      $or: [{ role: "doctor" }, { role: "clinic" }],
+    }).populate({ path: "reviews", select: "_id name surname image" });
+
+    res.status(200).send(users);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 const addNewUser = async (req, res, next) => {
   try {
     const newUser = new UserModel(req.body);
@@ -225,4 +238,5 @@ module.exports = {
   googleAuth,
   cloudMulter,
   addProfilePicture,
+  getDoctorsAndClinics,
 };

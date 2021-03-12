@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const UserSchema = new Schema(
   {
     name: { type: String, require: true },
-    surname: { type: String, require: true },
+    surname: { type: String },
     image: {
       type: String,
       require: true,
@@ -30,12 +30,28 @@ const UserSchema = new Schema(
       required: true,
     },
     phone: { type: String },
-    gender: { type: String, require: true, enum: ["male", "female"] },
+    gender: { type: String, enum: ["male", "female"] },
     birthdate: { type: String },
     documentId: { type: String },
     refreshTokens: [],
     googleId: { type: String },
-    reviews: [{ review: { type: String }, rate: { type: Number } }],
+    description: { type: String },
+    languages: { type: String },
+    website: { type: String },
+    // education: {},
+    // experience: {},
+    reviews: [
+      {
+        user: { type: Schema.Types.ObjectId, ref: "User" },
+        review: { type: String },
+      },
+    ],
+    rating: [
+      {
+        user: { type: Schema.Types.ObjectId },
+        rate: { type: Number },
+      },
+    ],
   },
   { timestamps: true }
 );

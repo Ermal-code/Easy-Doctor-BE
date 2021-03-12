@@ -19,11 +19,14 @@ const {
   googleAuth,
   cloudMulter,
   addProfilePicture,
+  getDoctorsAndClinics,
 } = require("../../controllers/userControllers");
 
 router.get("/", authorizeUser, adminOnly, getAllUsers);
 
 router.get("/me", authorizeUser, getUser);
+
+router.get("/doctorsAndClinics", authorizeUser, getDoctorsAndClinics);
 
 router.post("/register", addNewUser);
 
