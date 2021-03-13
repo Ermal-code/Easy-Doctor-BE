@@ -40,7 +40,6 @@ const UserSchema = new Schema(
     website: { type: String },
     // education: {},
     // experience: {},
-
     rating: [
       {
         _id: false,

@@ -1,0 +1,111 @@
+const moment = require("moment");
+const AppointmentModel = require("../services/appointments/schema");
+
+const getAppointmentById = async (req, res, next) => {
+  try {
+    const appointment = await AppointmentModel.findById(
+      req.params.appointmentId
+    ).populate([
+      { path: "patient", select: "_id name surname image" },
+      { path: "doctor", select: "_id name surname image" },
+      { path: "clinic", select: "_id name  image" },
+    ]);
+    if (appointment) {
+      res.status(200).send(appointment);
+    } else {
+      const err = new Error();
+      err.message = `Appointment with id: ${req.params.appointmentId} not found`;
+      err.httpStatusCode = 404;
+      next(err);
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const getAppointmentsForPatient = async (req, res, next) => {
+  const appointments = await AppointmentModel.find({
+    patient: req.user._id,
+  }).populate([
+    { path: "patient", select: "_id name surname image" },
+    { path: "doctor", select: "_id name surname image" },
+    { path: "clinic", select: "_id name  image" },
+  ]);
+  if (appointments.length > 0) {
+    res.status(200).send(appointments);
+  } else {
+    const err = new Error();
+    err.message = `This patient's appointments not found`;
+    err.httpStatusCode = 404;
+    next(err);
+  }
+};
+
+const getAppointmentsForDoctorsOrClinics = async (req, res, next) => {
+  try {
+    const appointments = await AppointmentModel.find({
+      $or: [{ doctor: req.user._id }, { clinic: req.user._id }],
+    }).populate([
+      { path: "patient", select: "_id name surname image" },
+      { path: "doctor", select: "_id name surname image" },
+      { path: "clinic", select: "_id name  image" },
+    ]);
+    if (appointments.length > 0) {
+      res.status(200).send(appointments);
+    } else {
+      const err = new Error();
+      err.message = `No appointments found for id ${req.user._id}`;
+      err.httpStatusCode = 404;
+      next(err);
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const addAppointment = async (req, res, next) => {
+  try {
+    const newAppointment = new AppointmentModel({
+      ...req.body,
+      patient: req.user._id,
+      startDate: moment(req.body.startDate).format(),
+      endDate: moment(req.body.startDate).add(1, "hours").format(),
+    });
+
+    await newAppointment.save();
+
+    res.status(201).send(newAppointment);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const removeAppointment = async (req, res, next) => {
+  try {
+    const deletedAppointment = await AppointmentModel.findByIdAndDelete(
+      req.params.appointmentId
+    );
+    if (deletedAppointment) {
+      res.status(203).send("Appointment is removed");
+    } else {
+      const err = new Error();
+      err.message = `Appointment with id: ${req.params.appointmentId}`;
+      err.httpStatusCode = 404;
+      next(err);
+    }
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+module.exports = {
+  getAppointmentById,
+  getAppointmentsForPatient,
+  getAppointmentsForDoctorsOrClinics,
+  addAppointment,
+  removeAppointment,
+};
