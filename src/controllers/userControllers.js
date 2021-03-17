@@ -115,20 +115,26 @@ const loginUser = async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await UserModel.findByCredentials(email, password);
+    if (user) {
+      const { accessToken, refreshToken } = await authenticateUser(user);
 
-    const { accessToken, refreshToken } = await authenticateUser(user);
+      res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        path: "/",
+      });
 
-    res.cookie("accessToken", accessToken, {
-      httpOnly: true,
-      path: "/",
-    });
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        path: "/api/users/refreshToken",
+      });
 
-    res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      path: "/api/users/refreshToken",
-    });
-
-    res.send("OK");
+      res.send({ response: "Logged in" });
+    } else {
+      const err = new Error();
+      err.message = `Email or password is wrong`;
+      err.httpStatusCode = 404;
+      next(err);
+    }
   } catch (error) {
     console.log(error);
     next(error);
