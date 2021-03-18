@@ -57,6 +57,7 @@ const refreshToken = async (oldRefreshToken) => {
   );
 
   if (!currentRefreshToken) {
+    console.log(currentRefreshToken);
     throw new Error("Refresh token is wrong");
   }
 

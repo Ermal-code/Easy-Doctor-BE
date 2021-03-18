@@ -36,8 +36,28 @@ const UserSchema = new Schema(
     refreshTokens: [],
     googleId: { type: String },
     description: { type: String },
-    languages: { type: String },
+    languages: [{ type: String }],
     website: { type: String },
+    workingHours: [
+      {
+        _id: false,
+        day: {
+          type: String,
+          enum: [
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+          ],
+        },
+        startHour: { type: String },
+        endHour: { type: String },
+      },
+    ],
+
     // education: {},
     // experience: {},
     rating: [
@@ -57,6 +77,7 @@ UserSchema.methods.toJSON = function () {
 
   delete userObj.password;
   delete userObj.__v;
+  delete userObj.refreshTokens;
 
   return userObj;
 };

@@ -45,7 +45,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
 const getAppointmentsForDoctorsOrClinics = async (req, res, next) => {
   try {
     const appointments = await AppointmentModel.find({
-      $or: [{ doctor: req.user._id }, { clinic: req.user._id }],
+      $or: [{ doctor: req.params.userId }, { clinic: req.params.userId }],
     }).populate([
       { path: "patient", select: "_id name surname image" },
       { path: "doctor", select: "_id name surname image" },
@@ -55,7 +55,7 @@ const getAppointmentsForDoctorsOrClinics = async (req, res, next) => {
       res.status(200).send(appointments);
     } else {
       const err = new Error();
-      err.message = `No appointments found for id ${req.user._id}`;
+      err.message = `No appointments found for id ${req.params.userId}`;
       err.httpStatusCode = 404;
       next(err);
     }
@@ -71,7 +71,7 @@ const addAppointment = async (req, res, next) => {
       ...req.body,
       patient: req.user._id,
       startDate: moment(req.body.startDate).format(),
-      endDate: moment(req.body.startDate).add(1, "hours").format(),
+      endDate: moment(req.body.startDate).add(30, "minutes").format(),
     });
 
     await newAppointment.save();

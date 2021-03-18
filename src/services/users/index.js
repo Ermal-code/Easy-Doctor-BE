@@ -41,7 +41,7 @@ router.post("/logout", authorizeUser, logOutUser);
 
 router.post("/logoutAllUsers", authorizeUser, logOutFromAllDevices);
 
-router.get("/refreshToken", userRefreshToken);
+router.post("/refreshToken", userRefreshToken);
 
 router.get(
   "/googleLogin",

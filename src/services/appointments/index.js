@@ -11,7 +11,7 @@ const {
 
 router.get("/patientAppointments", authorizeUser, getAppointmentsForPatient);
 router.get(
-  "/doctorOrClinicAppointments",
+  "/doctorOrClinicAppointments/:userId",
   authorizeUser,
   getAppointmentsForDoctorsOrClinics
 );
