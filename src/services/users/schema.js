@@ -78,7 +78,7 @@ const UserSchema = new Schema(
     ],
     specialization: [
       {
-        type: Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId, // required to be fixed
         ref: "Specialization",
         required: [
           function () {
@@ -89,8 +89,10 @@ const UserSchema = new Schema(
       },
     ],
 
-    // education: {},
-    // experience: {},
+    // education: {}, create education routes
+    // experience: {},create experience routes
+    // range of provided services routes to be created
+    // address to be added
     rating: [
       {
         _id: false,
