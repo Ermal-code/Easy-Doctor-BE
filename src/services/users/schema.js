@@ -1,10 +1,18 @@
-const { Schema, model } = require("mongoose");
+const { Schema, model, SchemaTypes } = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const UserSchema = new Schema(
   {
-    name: { type: String, required: true },
-    surname: { type: String },
+    name: { type: String, required: [true, "Name is required"] },
+    surname: {
+      type: String,
+      required: [
+        function () {
+          return this.role === "patient" || this.role === "doctor";
+        },
+        "Surname is required",
+      ],
+    },
     image: {
       type: String,
       required: true,
@@ -12,7 +20,7 @@ const UserSchema = new Schema(
     },
     email: {
       type: String,
-      required: "Email is required",
+      required: [true, "Email is required"],
       trim: true,
       lowercase: true,
       match: [
@@ -22,20 +30,31 @@ const UserSchema = new Schema(
       unique: true,
       dropDups: true,
     },
-    password: { type: String },
+    password: {
+      type: String,
+      required: [
+        function () {
+          return !this.googleId || this.googleId === "";
+        },
+        "Password is required",
+      ],
+    },
     role: {
       type: String,
       enum: ["patient", "doctor", "clinic", "admin"],
       default: "patient",
-      required: true,
+      required: [true, "Type of user is required"],
     },
-    phone: { type: String },
-    gender: { type: String, enum: ["male", "female"] },
+    phone: { type: String, required: [true, "Phone number is required"] },
+    gender: { type: String, enum: ["male", "female", "non-binary"] },
     birthdate: { type: String },
     documentId: { type: String },
     refreshTokens: [],
     googleId: { type: String },
-    description: { type: String },
+    description: {
+      type: String,
+      minlength: [30, "Description needs to be at least 30 characters"],
+    },
     languages: [{ type: String }],
     website: { type: String },
     workingHours: [
@@ -55,6 +74,18 @@ const UserSchema = new Schema(
         },
         startHour: { type: String },
         endHour: { type: String },
+      },
+    ],
+    specialization: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Specialization",
+        required: [
+          function () {
+            return this.role === "doctor" || this.role === "clinic";
+          },
+          "Specialization is required",
+        ],
       },
     ],
 

@@ -26,7 +26,7 @@ const generateJWT = (payload, secret) =>
     jwt.sign(
       payload,
       secret,
-      { expiresIn: secret === process.env.JWT_SECRET ? "15m" : "1 week" },
+      { expiresIn: secret === process.env.JWT_SECRET ? "10000" : "1 week" },
       (err, token) => {
         if (err) rej(err);
         res(token);
@@ -51,6 +51,8 @@ const refreshToken = async (oldRefreshToken) => {
   if (!user) {
     throw new Error("Access to this action is forbidden for this user");
   }
+
+  console.log("oldRefresh: ", oldRefreshToken);
 
   const currentRefreshToken = user.refreshTokens.find(
     (token) => token === oldRefreshToken

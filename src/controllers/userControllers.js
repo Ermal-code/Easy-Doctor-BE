@@ -82,8 +82,23 @@ const addNewUser = async (req, res, next) => {
     });
     res.status(201).send(_id);
   } catch (error) {
-    console.log(error);
-    next(error);
+    if (error.name === "ValidationError") {
+      error.httpStatusCode = 400;
+      let errorArray = [];
+      const errs = Object.keys(error.errors);
+
+      errs.forEach((err) =>
+        errorArray.push({
+          message: error.errors[err].message,
+          path: error.errors[err].path,
+        })
+      );
+
+      next({ httpStatusCode: error.httpStatusCode, errors: errorArray });
+    } else {
+      error.httpStatusCode = 500;
+      next(error);
+    }
   }
 };
 
@@ -188,7 +203,7 @@ const userRefreshToken = async (req, res, next) => {
 
       res.cookie("refreshToken", tokens.refreshToken, {
         httpOnly: true,
-        path: "/users/refreshToken",
+        path: "/api/users/refreshToken",
       });
 
       res.send("OK");
