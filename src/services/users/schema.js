@@ -88,11 +88,20 @@ const UserSchema = new Schema(
         ],
       },
     ],
-
+    clinicOrHopsital: {
+      type: String,
+      required: [
+        function () {
+          return this.role === "doctor";
+        },
+        "Clinic or hospital that user works for is required",
+      ],
+    },
     // education: {}, create education routes
     // experience: {},create experience routes
     // range of provided services routes to be created
     // address to be added
+    // staff to be added
     rating: [
       {
         _id: false,
