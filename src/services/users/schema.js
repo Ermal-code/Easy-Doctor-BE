@@ -41,14 +41,14 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["patient", "doctor", "clinic", "admin"],
+      enum: ["Patient", "Doctor", "Clinic", "Admin"],
       default: "patient",
       required: [true, "Type of user is required"],
     },
     phone: { type: String, required: [true, "Phone number is required"] },
     gender: { type: String, enum: ["male", "female", "non-binary"] },
     birthdate: { type: String },
-    documentId: { type: String },
+    // documentId: { type: String },
     refreshTokens: [],
     googleId: { type: String },
     description: {
@@ -76,18 +76,18 @@ const UserSchema = new Schema(
         endHour: { type: String },
       },
     ],
-    specialization: [
-      {
-        type: Schema.Types.ObjectId, // required to be fixed
-        ref: "Specialization",
-        required: [
-          function () {
-            return this.role === "doctor" || this.role === "clinic";
-          },
-          "Specialization is required",
-        ],
-      },
-    ],
+    specialization: {
+      type: [Schema.Types.ObjectId],
+      ref: "Specialization",
+      validate: [
+        (v) =>
+          Array.isArray(v) &&
+          v.length > 0 &&
+          (this.role === "doctor" || this.role === "clinic"),
+        "At least one specialization is required",
+      ],
+    },
+
     clinicOrHopsital: {
       type: String,
       required: [
