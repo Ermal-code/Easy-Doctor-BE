@@ -67,7 +67,7 @@ const getDoctorsAndClinics = async (req, res, next) => {
 const addNewUser = async (req, res, next) => {
   try {
     const newUser = new UserModel(req.body);
-    const { _id } = await newUser.save();
+    await newUser.save();
 
     const { accessToken, refreshToken } = await authenticateUser(newUser);
 
@@ -80,7 +80,7 @@ const addNewUser = async (req, res, next) => {
       httpOnly: true,
       path: "/api/users/refreshToken",
     });
-    res.status(201).send(_id);
+    res.status(201).send(newUser);
   } catch (error) {
     if (error.name === "ValidationError") {
       error.httpStatusCode = 400;

@@ -1,4 +1,4 @@
-const { Schema, model, SchemaTypes } = require("mongoose");
+const { Schema, model } = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const UserSchema = new Schema(
@@ -41,7 +41,7 @@ const UserSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["Patient", "Doctor", "Clinic", "Admin"],
+      enum: ["patient", "doctor", "clinic", "admin"],
       default: "patient",
       required: [true, "Type of user is required"],
     },
@@ -79,13 +79,17 @@ const UserSchema = new Schema(
     specialization: {
       type: [Schema.Types.ObjectId],
       ref: "Specialization",
-      validate: [
-        (v) =>
-          Array.isArray(v) &&
-          v.length > 0 &&
-          (this.role === "doctor" || this.role === "clinic"),
-        "At least one specialization is required",
-      ],
+      // validate: [
+      //   function (v) {
+      //     return (
+      //       Array.isArray(v) &&
+      //       v.length > 0 &&
+      //       (this.role === "doctor" || this.role === "clinic")
+      //     );
+      //   },
+
+      //   "At least one specialization is required",
+      // ],
     },
 
     clinicOrHopsital: {
