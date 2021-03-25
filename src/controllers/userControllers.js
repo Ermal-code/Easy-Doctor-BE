@@ -16,7 +16,10 @@ const cloudMulter = multer({ storage: cloudStorage });
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await UserModel.find();
+    const users = await UserModel.find().populate({
+      path: "specialization",
+      select: "field",
+    });
 
     res.status(200).send(users);
   } catch (error) {
@@ -36,7 +39,10 @@ const getUser = async (req, res, next) => {
 
 const getUserById = async (req, res, next) => {
   try {
-    const user = await UserModel.findById(req.params.userId);
+    const user = await UserModel.findById(req.params.userId).populate({
+      path: "specialization",
+      select: "field",
+    });
     if (user) {
       res.status(200).send(user);
     } else {
@@ -55,7 +61,7 @@ const getDoctorsAndClinics = async (req, res, next) => {
   try {
     const users = await UserModel.find({
       $or: [{ role: "doctor" }, { role: "clinic" }],
-    }).populate({ path: "reviews", select: "_id name surname image" });
+    }).populate({ path: "specialization", select: "field" });
 
     res.status(200).send(users);
   } catch (error) {

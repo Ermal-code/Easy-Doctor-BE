@@ -1,7 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 const SpecializationSchema = new Schema({
-  specialization: {
+  field: {
     type: String,
     required: [true, "Specialization is required"],
   },

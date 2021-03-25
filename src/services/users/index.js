@@ -27,7 +27,7 @@ router.get("/", authorizeUser, adminOnly, getAllUsers);
 
 router.get("/me", authorizeUser, getUser);
 
-router.get("/doctorsAndClinics", authorizeUser, getDoctorsAndClinics);
+router.get("/doctorsAndClinics", getDoctorsAndClinics);
 
 router.post("/register", addNewUser);
 
@@ -59,5 +59,5 @@ router.post(
 
 router.post("/:userId/addRating", authorizeUser, addRating);
 
-router.get("/:userId", authorizeUser, getUserById);
+router.get("/:userId", getUserById);
 module.exports = router;

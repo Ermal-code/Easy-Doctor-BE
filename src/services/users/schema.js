@@ -16,7 +16,7 @@ const UserSchema = new Schema(
     image: {
       type: String,
       required: true,
-      default: `https://lh3.googleusercontent.com/proxy/GjZL2aHCfzXqLnTGNtp9ZyY7DmRmOI7qe0jD8w0ugk5gNLvH8w3j2rpy4CGTMe8t2Qnhqo62y5d2lnUzLTYG2IEt4pgNmQ0PgJJHmnia_Tr0RdCFJC8q9Jo9QRKrxWw`,
+      default: `https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png`,
     },
     email: {
       type: String,
@@ -76,21 +76,23 @@ const UserSchema = new Schema(
         endHour: { type: String },
       },
     ],
-    specialization: {
-      type: [Schema.Types.ObjectId],
-      ref: "Specialization",
-      // validate: [
-      //   function (v) {
-      //     return (
-      //       Array.isArray(v) &&
-      //       v.length > 0 &&
-      //       (this.role === "doctor" || this.role === "clinic")
-      //     );
-      //   },
+    specialization: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Specialization",
+        // validate: [
+        //   function (v) {
+        //     return (
+        //       Array.isArray(v) &&
+        //       v.length > 0 &&
+        //       (this.role === "doctor" || this.role === "clinic")
+        //     );
+        //   },
 
-      //   "At least one specialization is required",
-      // ],
-    },
+        //   "At least one specialization is required",
+        // ],
+      },
+    ],
 
     clinicOrHopsital: {
       type: String,
