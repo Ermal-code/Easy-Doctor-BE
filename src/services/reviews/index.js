@@ -7,7 +7,7 @@ const {
   deleteReview,
 } = require("../../controllers/reviewControllers");
 
-router.get("/:userId", authorizeUser, getReviewsForUser);
+router.get("/:userId", getReviewsForUser);
 
 router.post("/:userId", authorizeUser, addReview);
 
