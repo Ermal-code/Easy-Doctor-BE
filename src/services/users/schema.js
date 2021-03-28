@@ -45,7 +45,7 @@ const UserSchema = new Schema(
       default: "patient",
       required: [true, "Type of user is required"],
     },
-    phone: { type: String, required: [true, "Phone number is required"] },
+    phone: { type: String },
     gender: { type: String, enum: ["male", "female", "non-binary"] },
     birthdate: { type: String },
     // documentId: { type: String },
