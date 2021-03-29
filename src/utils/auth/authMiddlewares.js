@@ -4,10 +4,10 @@ const { verifyJWT } = require("./");
 const authorizeUser = async (req, res, next) => {
   try {
     const token = req.cookies.accessToken;
+
     const decoded = await verifyJWT(token, process.env.JWT_SECRET);
 
     const user = await UserModel.findOne({ _id: decoded._id });
-
     if (!user) {
       const err = new Error(`User with id: ${decodedToken._id} not found!`);
       err.httpStatusCode = 404;

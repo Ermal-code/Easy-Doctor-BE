@@ -94,7 +94,7 @@ const UserSchema = new Schema(
       },
     ],
 
-    clinicOrHopsital: {
+    clinicOrHospital: {
       type: String,
       required: [
         function () {

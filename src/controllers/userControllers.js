@@ -30,7 +30,11 @@ const getAllUsers = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   try {
-    res.status(200).send(req.user);
+    const user = await UserModel.findById(req.user._id).populate({
+      path: "specialization",
+      select: "field",
+    });
+    res.status(200).send(user);
   } catch (error) {
     console.log(error);
     next(error);
