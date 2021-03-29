@@ -104,7 +104,7 @@ const UserSchema = new Schema(
       ],
     },
     // education: {}, create education routes
-    // experience: {},create experience routes
+
     // range of provided services routes to be created
     // address to be added
     // staff to be added
