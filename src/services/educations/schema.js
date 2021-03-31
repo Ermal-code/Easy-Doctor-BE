@@ -9,6 +9,7 @@ const EducationSchema = new Schema({
   school: { type: String, required: [true, "Name of school is required"] },
   startDate: { type: Date, required: [true, "Start date is required"] },
   endDate: { type: Date },
+  degree: { type: String },
   area: { type: String },
   user: { type: Schema.Types.ObjectId, required: true },
 });
