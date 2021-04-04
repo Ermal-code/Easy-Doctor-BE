@@ -27,11 +27,13 @@ const getAppointmentById = async (req, res, next) => {
 const getAppointmentsForPatient = async (req, res, next) => {
   const appointments = await AppointmentModel.find({
     patient: req.user._id,
-  }).populate([
-    { path: "patient", select: "_id name surname image" },
-    { path: "doctor", select: "_id name surname image" },
-    { path: "clinic", select: "_id name  image" },
-  ]);
+  })
+    .populate([
+      { path: "patient", select: "_id name surname image" },
+      { path: "doctor", select: "_id name surname image" },
+      { path: "clinic", select: "_id name  image" },
+    ])
+    .sort({ startDate: 1 });
   if (appointments.length > 0) {
     res.status(200).send(appointments);
   } else {
@@ -46,11 +48,13 @@ const getAppointmentsForDoctorsOrClinics = async (req, res, next) => {
   try {
     const appointments = await AppointmentModel.find({
       $or: [{ doctor: req.params.userId }, { clinic: req.params.userId }],
-    }).populate([
-      { path: "patient", select: "_id name surname image" },
-      { path: "doctor", select: "_id name surname image" },
-      { path: "clinic", select: "_id name  image" },
-    ]);
+    })
+      .populate([
+        { path: "patient", select: "_id name surname image" },
+        { path: "doctor", select: "_id name surname image" },
+        { path: "clinic", select: "_id name  image" },
+      ])
+      .sort({ startDate: 1 });
     if (appointments.length > 0) {
       res.status(200).send(appointments);
     } else {
