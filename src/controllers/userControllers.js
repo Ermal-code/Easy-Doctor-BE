@@ -4,7 +4,6 @@ const { refreshToken } = require("../utils/auth");
 const multer = require("multer");
 const cloudinary = require("../utils/cloudinaryConfig");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const mongoose = require("mongoose");
 
 const cloudStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
@@ -51,7 +50,7 @@ const getUserById = async (req, res, next) => {
     if (user) {
       if (user.role === "patient" && !req.user) {
         const err = new Error();
-        err.message = `You are need to log in to view this profile`;
+        err.message = `You need to log in to view this profile`;
         err.httpStatusCode = 403;
         next(err);
       } else if (user.role === "patient" && req.user) {
@@ -312,6 +311,35 @@ const addRating = async (req, res, next) => {
   }
 };
 
+const addAllowedUser = async (req, res, next) => {
+  try {
+    const addAllowedUsers = await UserModel.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { allowedUsers: req.params.userId },
+      },
+      { runValidators: true, new: true }
+    );
+
+    res.status(201).send(addAllowedUsers);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+const removeAllowedUser = async (req, res, next) => {
+  try {
+    const removeAllowedUser = await UserModel.findByIdAndUpdate(req.user._id, {
+      $pull: { allowedUsers: req.params.userId },
+    });
+
+    res.status(203).send(removeAllowedUser);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
 module.exports = {
   getAllUsers,
   getUser,
@@ -328,4 +356,6 @@ module.exports = {
   addProfilePicture,
   getDoctorsAndClinics,
   addRating,
+  addAllowedUser,
+  removeAllowedUser,
 };

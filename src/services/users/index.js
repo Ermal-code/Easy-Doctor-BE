@@ -22,6 +22,8 @@ const {
   addProfilePicture,
   getDoctorsAndClinics,
   addRating,
+  addAllowedUser,
+  removeAllowedUser,
 } = require("../../controllers/userControllers");
 
 router.get("/", authorizeUser, adminOnly, getAllUsers);
@@ -59,6 +61,10 @@ router.post(
 );
 
 router.post("/:userId/addRating", authorizeUser, addRating);
+
+router.post("/:userId/addAllowedUser", authorizeUser, addAllowedUser);
+
+router.post("/:userId/removeAllowedUser", authorizeUser, removeAllowedUser);
 
 router.get("/:userId", authorzieUserForViewingPatientProfile, getUserById);
 module.exports = router;
