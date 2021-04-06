@@ -4,6 +4,7 @@ const { refreshToken } = require("../utils/auth");
 const multer = require("multer");
 const cloudinary = require("../utils/cloudinaryConfig");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const mongoose = require("mongoose");
 
 const cloudStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
@@ -48,7 +49,28 @@ const getUserById = async (req, res, next) => {
       select: "field",
     });
     if (user) {
-      res.status(200).send(user);
+      if (user.role === "patient" && !req.user) {
+        const err = new Error();
+        err.message = `You are need to log in to view this profile`;
+        err.httpStatusCode = 403;
+        next(err);
+      } else if (user.role === "patient" && req.user) {
+        const isAllowed = await UserModel.findOne({
+          _id: req.params.userId,
+          allowedUsers: { $in: req.user._id },
+        });
+
+        if (isAllowed || user._id.toString() === req.user._id.toString()) {
+          res.status(200).send(user);
+        } else {
+          const err = new Error();
+          err.message = "You are not allowed to view this profile";
+          err.httpStatusCode = 403;
+          next(err);
+        }
+      } else {
+        res.status(200).send(user);
+      }
     } else {
       const err = new Error();
       err.message = `User with id: ${req.params.userId} not found`;

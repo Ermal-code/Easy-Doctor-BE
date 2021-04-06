@@ -115,6 +115,7 @@ const UserSchema = new Schema(
         rate: { type: Number },
       },
     ],
+    allowedUsers: [{ type: Schema.Types.ObjectId }],
   },
   { timestamps: true }
 );

@@ -3,6 +3,7 @@ const passport = require("passport");
 const {
   authorizeUser,
   adminOnly,
+  authorzieUserForViewingPatientProfile,
 } = require("../../utils/auth/authMiddlewares");
 
 const {
@@ -59,5 +60,5 @@ router.post(
 
 router.post("/:userId/addRating", authorizeUser, addRating);
 
-router.get("/:userId", getUserById);
+router.get("/:userId", authorzieUserForViewingPatientProfile, getUserById);
 module.exports = router;

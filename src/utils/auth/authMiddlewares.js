@@ -19,9 +19,33 @@ const authorizeUser = async (req, res, next) => {
     }
   } catch (error) {
     console.log(error);
-    const err = new Error("You are not authenticated for this action");
+    const err = new Error();
+    err.message = "You are not authenticated for this action";
     err.httpStatusCode = 401;
     next(err);
+  }
+};
+
+const authorzieUserForViewingPatientProfile = async (req, res, next) => {
+  try {
+    const token = req.cookies.accessToken;
+
+    const decoded = await verifyJWT(token, process.env.JWT_SECRET);
+
+    const user = await UserModel.findOne({ _id: decoded._id });
+    if (!user) {
+      const err = new Error(`User with id: ${decodedToken._id} not found!`);
+      err.httpStatusCode = 404;
+      next(err);
+    } else {
+      req.token = token;
+      req.user = user;
+      next();
+    }
+  } catch (error) {
+    req.token = null;
+    req.user = null;
+    next();
   }
 };
 
@@ -36,4 +60,8 @@ const adminOnly = async (req, res, next) => {
   }
 };
 
-module.exports = { authorizeUser, adminOnly };
+module.exports = {
+  authorizeUser,
+  adminOnly,
+  authorzieUserForViewingPatientProfile,
+};
