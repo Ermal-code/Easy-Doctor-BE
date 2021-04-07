@@ -103,7 +103,6 @@ const UserSchema = new Schema(
         "Clinic or hospital that user works for is required",
       ],
     },
-    // education: {}, create education routes
 
     // range of provided services routes to be created
     // address to be added

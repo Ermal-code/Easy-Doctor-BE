@@ -4,6 +4,7 @@ const { refreshToken } = require("../utils/auth");
 const multer = require("multer");
 const cloudinary = require("../utils/cloudinaryConfig");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const q2m = require("query-to-mongo");
 
 const cloudStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
@@ -84,9 +85,19 @@ const getUserById = async (req, res, next) => {
 
 const getDoctorsAndClinics = async (req, res, next) => {
   try {
-    const users = await UserModel.find({
-      $or: [{ role: "doctor" }, { role: "clinic" }],
-    }).populate({ path: "specialization", select: "field" });
+    let users;
+    if (req.query && req.query.name) {
+      users = await UserModel.find({
+        name: req.query.name,
+        $or: [{ role: "doctor" }, { role: "clinic" }],
+      })
+        .populate({ path: "specialization", select: "field" })
+        .collation({ locale: "en", strength: 2 });
+    } else {
+      users = await UserModel.find({
+        $or: [{ role: "doctor" }, { role: "clinic" }],
+      }).populate({ path: "specialization", select: "field" });
+    }
 
     res.status(200).send(users);
   } catch (error) {
