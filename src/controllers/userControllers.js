@@ -16,10 +16,7 @@ const cloudMulter = multer({ storage: cloudStorage });
 
 const getAllUsers = async (req, res, next) => {
   try {
-    const users = await UserModel.find().populate({
-      path: "specialization",
-      select: "field",
-    });
+    const users = await UserModel.find();
 
     res.status(200).send(users);
   } catch (error) {
@@ -30,10 +27,7 @@ const getAllUsers = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
   try {
-    const user = await UserModel.findById(req.user._id).populate({
-      path: "specialization",
-      select: "field",
-    });
+    const user = await UserModel.findById(req.user._id);
     res.status(200).send(user);
   } catch (error) {
     console.log(error);
@@ -43,10 +37,7 @@ const getUser = async (req, res, next) => {
 
 const getUserById = async (req, res, next) => {
   try {
-    const user = await UserModel.findById(req.params.userId).populate({
-      path: "specialization",
-      select: "field",
-    });
+    const user = await UserModel.findById(req.params.userId);
     if (user) {
       if (user.role === "patient" && !req.user) {
         const err = new Error();
@@ -89,13 +80,11 @@ const getDoctorsAndClinics = async (req, res, next) => {
       users = await UserModel.find({
         name: req.query.name,
         $or: [{ role: "doctor" }, { role: "clinic" }],
-      })
-        .populate({ path: "specialization", select: "field" })
-        .collation({ locale: "en", strength: 2 });
+      }).collation({ locale: "en", strength: 2 });
     } else {
       users = await UserModel.find({
         $or: [{ role: "doctor" }, { role: "clinic" }],
-      }).populate({ path: "specialization", select: "field" });
+      });
     }
 
     res.status(200).send(users);
@@ -184,7 +173,7 @@ const loginUser = async (req, res, next) => {
         path: "/api/users/refreshToken",
       });
 
-      res.send({ response: "Logged in" });
+      res.status(201).send(user);
     } else {
       const err = new Error();
       err.message = `Email or password is wrong`;

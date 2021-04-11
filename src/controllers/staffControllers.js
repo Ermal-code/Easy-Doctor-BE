@@ -39,7 +39,6 @@ const getHospitalStaff = async (req, res, next) => {
       {
         path: "doctor",
         select: "name surname image specialization",
-        populate: { path: "specialization", select: "field" },
       },
     ]);
     if (staff) {

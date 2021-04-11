@@ -1,5 +1,6 @@
 const moment = require("moment");
 const AppointmentModel = require("../services/appointments/schema");
+const { createMeeting } = require("../utils/zoomMeetingCreation");
 
 const getAppointmentById = async (req, res, next) => {
   try {
@@ -80,7 +81,16 @@ const addAppointment = async (req, res, next) => {
 
     await newAppointment.save();
 
-    res.status(201).send(newAppointment);
+    let response;
+    if (req.body.type === "online") {
+      response = await createMeeting(
+        "ermal.aa@live.com",
+        req.body.reason,
+        moment(req.body.startDate).format()
+      );
+    }
+
+    res.status(201).send({ newAppointment, response });
   } catch (error) {
     console.log(error);
     next(error);

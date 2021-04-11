@@ -46,7 +46,7 @@ const UserSchema = new Schema(
       required: [true, "Type of user is required"],
     },
     phone: { type: String },
-    gender: { type: String, enum: ["male", "female", "non-binary"] },
+    gender: { type: String, enum: ["male", "female", "Other"] },
     birthdate: { type: String },
     // documentId: { type: String },
     refreshTokens: [],
@@ -76,23 +76,7 @@ const UserSchema = new Schema(
         endHour: { type: String },
       },
     ],
-    specialization: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Specialization",
-        // validate: [
-        //   function (v) {
-        //     return (
-        //       Array.isArray(v) &&
-        //       v.length > 0 &&
-        //       (this.role === "doctor" || this.role === "clinic")
-        //     );
-        //   },
-
-        //   "At least one specialization is required",
-        // ],
-      },
-    ],
+    specialization: [{ type: String }],
 
     clinicOrHospital: {
       type: String,
@@ -106,7 +90,7 @@ const UserSchema = new Schema(
 
     // range of provided services routes to be created
     // address to be added
-    // staff to be added
+
     rating: [
       {
         _id: false,
