@@ -1,6 +1,9 @@
 const moment = require("moment");
 const AppointmentModel = require("../services/appointments/schema");
+const UserModel = require("../services/users/schema");
 const { createMeeting } = require("../utils/zoomMeetingCreation");
+const sgMail = require("@sendgrid/mail");
+const { emailMessage } = require("../utils/sgMail");
 
 const getAppointmentById = async (req, res, next) => {
   try {
@@ -81,16 +84,48 @@ const addAppointment = async (req, res, next) => {
 
     await newAppointment.save();
 
-    let response;
-    if (req.body.type === "online") {
-      response = await createMeeting(
-        "ermal.aa@live.com",
-        req.body.reason,
-        moment(req.body.startDate).format()
-      );
-    }
+    const patient = await UserModel.findById(req.user._id);
 
-    res.status(201).send({ newAppointment, response });
+    const doctor = await UserModel.findById(req.body.doctor);
+
+    const clinic = req.body.clinic
+      ? await UserModel.findById(req.body.clinic)
+      : null;
+
+    if (patient && doctor) {
+      let response;
+      if (req.body.type === "online") {
+        response = await createMeeting(
+          "ermal.aa@live.com",
+          "gentadallku@gmail.com",
+          req.body.reason,
+          moment(req.body.startDate).format()
+        );
+      }
+
+      sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+      await sgMail.send([
+        emailMessage(
+          patient.email,
+          false,
+          req,
+          patient,
+          doctor,
+          response,
+          false
+        ),
+        emailMessage(doctor.email, true, req, patient, doctor, response, false),
+        emailMessage(clinic.email, false, req, patient, doctor, response, true),
+      ]);
+
+      res.status(201).send({ newAppointment, response });
+    } else {
+      const err = new Error();
+      err.message = "Doctor and patient not found";
+      err.httpStatusCode = 404;
+      next(err);
+    }
   } catch (error) {
     console.log(error);
     next(error);
