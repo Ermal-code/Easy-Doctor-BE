@@ -19,6 +19,9 @@ const services = require("./services");
 
 const server = express();
 
+server.set("trust proxy", 1);
+server.enable("trust proxy");
+
 const port = process.env.PORT || 3003;
 
 const whitelist = [`${process.env.FE_URL}`];

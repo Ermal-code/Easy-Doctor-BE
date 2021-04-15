@@ -104,11 +104,15 @@ const addNewUser = async (req, res, next) => {
     res.cookie("accessToken", accessToken, {
       httpOnly: true,
       path: "/",
+      secure: true,
+      sameSite: "none",
     });
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       path: "/api/users/refreshToken",
+      secure: true,
+      sameSite: "none",
     });
     res.status(201).send(newUser);
   } catch (error) {
@@ -166,11 +170,15 @@ const loginUser = async (req, res, next) => {
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         path: "/",
+        secure: true,
+        sameSite: "none",
       });
 
       res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         path: "/api/users/refreshToken",
+        secure: true,
+        sameSite: "none",
       });
 
       res.status(201).send(user);
@@ -229,11 +237,15 @@ const userRefreshToken = async (req, res, next) => {
       res.cookie("accessToken", tokens.accessToken, {
         httpOnly: true,
         path: "/",
+        secure: true,
+        sameSite: "none",
       });
 
       res.cookie("refreshToken", tokens.refreshToken, {
         httpOnly: true,
         path: "/api/users/refreshToken",
+        secure: true,
+        sameSite: "none",
       });
 
       res.send("OK");
@@ -250,11 +262,15 @@ const googleAuth = async (req, res, next) => {
   try {
     res.cookie("accessToken", req.user.tokens.accessToken, {
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
     });
 
     res.cookie("refreshToken", req.user.tokens.refreshToken, {
       httpOnly: true,
       path: "/api/users/refreshToken",
+      secure: true,
+      sameSite: "none",
     });
 
     res.status(200).redirect(`${process.env.FE_URL}/home`);
