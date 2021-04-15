@@ -8,7 +8,7 @@ const payload = {
 };
 const token = jwt.sign(payload, process.env.API_ZOOM_SECRET);
 
-const createMeeting = async (email, emailOfUser, topic, startDate) => {
+const createMeeting = async (email, topic, startDate) => {
   try {
     console.log(startDate);
     const response = await axios.post(

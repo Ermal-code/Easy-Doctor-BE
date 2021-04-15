@@ -96,8 +96,7 @@ const addAppointment = async (req, res, next) => {
       let response;
       if (req.body.type === "online") {
         response = await createMeeting(
-          "ermal.aa@live.com",
-          "gentadallku@gmail.com",
+          "easy_doctor@hotmail.com",
           req.body.reason,
           moment(req.body.startDate).format()
         );
