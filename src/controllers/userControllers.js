@@ -80,7 +80,7 @@ const getDoctorsAndClinics = async (req, res, next) => {
       users = await UserModel.find({
         $or: [
           { name: req.query.name },
-          { specialization: { $elemMatch: req.query.specialization } },
+          { specialization: { $in: req.query.specialization } },
         ],
 
         $or: [{ role: "doctor" }, { role: "clinic" }],
