@@ -282,7 +282,7 @@ const googleAuth = async (req, res, next) => {
       sameSite: "none",
     });
 
-    res.status(200).redirect(`${process.env.FE_URL}/home`);
+    res.status(200).redirect(`${process.env.FE_URL}/`);
   } catch (error) {
     console.log(error);
     next(error);
