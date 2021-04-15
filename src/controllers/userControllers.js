@@ -78,10 +78,10 @@ const getDoctorsAndClinics = async (req, res, next) => {
     let users;
     if (req.query && (req.query.name || req.query.specialization)) {
       users = await UserModel.find({
-        $or: [
-          { name: req.query.name },
-          { specialization: { $in: req.query.specialization } },
-        ],
+        // $or: [
+        name: req.query.name,
+        // { specialization: { $in: req.query.specialization } },
+        // ],
 
         $or: [{ role: "doctor" }, { role: "clinic" }],
       }).collation({ locale: "en", strength: 2 });
