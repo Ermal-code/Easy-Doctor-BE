@@ -113,7 +113,7 @@ const deleteDocument = async (req, res, next) => {
       req.body
     );
     if (deletedDocument) {
-      res.status(200).send(deletedDocument);
+      res.status(203).send({ response: "Document is deleted successfuly" });
     } else {
       const err = new Error();
       err.message = `Document with Id: ${req.params.documentId} not found`;
