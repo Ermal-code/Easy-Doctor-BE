@@ -10,7 +10,7 @@ const emailMessage = (
 ) => {
   const msg = {
     to: `${email}`,
-    from: "ermal.aa@live.com",
+    from: "easy_doctor@hotmail.com",
     subject: `Appointment for ${req.body.reason}`,
     text: `Hello from Easy Doctor. An appointment was made by ${patient.name} ${
       patient.surname
