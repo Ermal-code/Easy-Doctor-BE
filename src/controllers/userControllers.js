@@ -4,7 +4,6 @@ const { refreshToken } = require("../utils/auth");
 const multer = require("multer");
 const cloudinary = require("../utils/cloudinaryConfig");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const { query } = require("express");
 
 const cloudStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
@@ -77,11 +76,11 @@ const getUserById = async (req, res, next) => {
 const getDoctorsAndClinics = async (req, res, next) => {
   try {
     let users;
-    if (req.query && req.query.searchValue) {
+    if (req.query && (req.query.name || req.query.specialization)) {
       users = await UserModel.find({
         $or: [
-          { name: req.query.searchValue },
-          { specialization: { $elemMatch: req.query.searchValue } },
+          { name: req.query.name },
+          { specialization: { $elemMatch: req.query.specialization } },
         ],
 
         $or: [{ role: "doctor" }, { role: "clinic" }],
