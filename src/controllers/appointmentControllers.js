@@ -127,8 +127,23 @@ const addAppointment = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
-    next(error);
+    if (error.name === "ValidationError") {
+      error.httpStatusCode = 400;
+      let errorArray = [];
+      const errs = Object.keys(error.errors);
+
+      errs.forEach((err) =>
+        errorArray.push({
+          message: error.errors[err].message,
+          path: error.errors[err].path,
+        })
+      );
+
+      next({ httpStatusCode: error.httpStatusCode, errors: errorArray });
+    } else {
+      error.httpStatusCode = 500;
+      next(error);
+    }
   }
 };
 

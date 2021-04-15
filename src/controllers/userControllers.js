@@ -266,6 +266,7 @@ const googleAuth = async (req, res, next) => {
 
 const addProfilePicture = async (req, res, next) => {
   try {
+    console.log(req.file);
     await req.user.updateOne({ image: req.file.path });
 
     res.status(201).send(req.user);

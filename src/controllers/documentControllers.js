@@ -6,7 +6,7 @@ const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudStorage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "profile",
+    folder: "documents",
   },
 });
 
@@ -72,7 +72,7 @@ const addFileForDocument = async (req, res, next) => {
     );
 
     if (addFile) {
-      res.status(200).send(addFile);
+      res.status(201).send(addFile);
     } else {
       const err = new Error();
       err.message = `Document with Id: ${req.params.documentId} not found`;

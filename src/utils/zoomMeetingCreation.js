@@ -3,10 +3,10 @@ const axios = require("axios");
 
 //Use the ApiKey and APISecret from config.js
 const payload = {
-  iss: process.env.API_KEY,
+  iss: process.env.API_ZOOM_KEY,
   exp: new Date().getTime() + 5000,
 };
-const token = jwt.sign(payload, process.env.API_SECRET);
+const token = jwt.sign(payload, process.env.API_ZOOM_SECRET);
 
 const createMeeting = async (email, emailOfUser, topic, startDate) => {
   try {
