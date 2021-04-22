@@ -50,7 +50,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
   if (appointments.length > 0) {
     res
       .status(200)
-      .send({ links: query.links("/appointments", total), appointments });
+      .send({ links: query.links("/api/appointments", total), appointments });
   } else {
     const err = new Error();
     err.message = `This patient's appointments not found`;
