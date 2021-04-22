@@ -99,6 +99,22 @@ const UserSchema = new Schema(
       },
     ],
     allowedUsers: [{ type: Schema.Types.ObjectId }],
+    postalCode: {
+      type: Number,
+      minlength: [5, "Postal Code needs to be 5 characters"],
+    },
+    street: {
+      type: String,
+      minlength: [5, "Street needs to be at least 5 characters"],
+    },
+    city: {
+      type: String,
+      minlength: [3, "City needs to be at least 3 characters"],
+    },
+    state: {
+      type: String,
+      minlength: [3, "State needs to be at least 3 characters"],
+    },
   },
   { timestamps: true }
 );
