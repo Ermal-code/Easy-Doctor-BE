@@ -31,7 +31,7 @@ const getAppointmentById = async (req, res, next) => {
 
 const getAppointmentsForPatient = async (req, res, next) => {
   const query = q2m(req.query);
-  const total = await UserModel.countDocuments(query.criteria);
+  const total = await AppointmentModel.countDocuments(query.criteria);
   const appointments = await AppointmentModel.find(
     query.criteria,
     query.options.fields,
@@ -50,7 +50,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
   if (appointments.length > 0) {
     res
       .status(200)
-      .send({ links: query.links("/api/appointments", total), appointments });
+      .send({ links: query.links("/appointments", total), appointments });
   } else {
     const err = new Error();
     err.message = `This patient's appointments not found`;
