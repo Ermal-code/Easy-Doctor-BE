@@ -32,7 +32,7 @@ const getAppointmentById = async (req, res, next) => {
 const getAppointmentsForPatient = async (req, res, next) => {
   try {
     const query = q2m(req.query);
-    let total = await AppointmentModel.countDocuments(query.criteria);
+    let total;
     const today = moment();
     console.log({ total });
     console.log({ today });
@@ -92,6 +92,8 @@ const getAppointmentsForPatient = async (req, res, next) => {
     }
 
     if (appointments.length > 0) {
+      total = appointments.length;
+      console.log(total);
       res
         .status(200)
         .send({ links: query.links("/appointments", total), appointments });
