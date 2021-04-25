@@ -119,7 +119,11 @@ const UserSchema = new Schema(
       type: String,
     },
     profession: { type: String },
-    maritalStatus: { type: String, enum: ["Single", "Married"] },
+    maritalStatus: {
+      type: String,
+      enum: ["Single", "Married"],
+      default: "Single",
+    },
     socialNumber: { type: String },
     foodAllergies: [{ type: String }],
     medicineAllergies: [{ type: String }],
