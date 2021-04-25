@@ -33,67 +33,35 @@ const getAppointmentsForPatient = async (req, res, next) => {
     const query = q2m(req.query);
     const today = moment();
 
-    let total;
-    let appointments;
-
     if (req.params.filterAppointments === "Upcoming") {
       query.criteria = {
         patient: req.user._id,
         startDate: { $gte: today.toDate() },
       };
-
-      appointments = await AppointmentModel.find(
-        query.criteria,
-        query.options.fields
-      )
-        .populate([
-          { path: "patient", select: "_id name surname image" },
-          { path: "doctor", select: "_id name surname image" },
-          { path: "clinic", select: "_id name  image" },
-        ])
-        .skip(query.options.skip)
-        .limit(query.options.limit)
-        .sort({ startDate: 1 });
-
-      total = await AppointmentModel.countDocuments(query.criteria);
     } else if (req.params.filterAppointments === "Past") {
       query.criteria = {
         patient: req.user._id,
         startDate: { $lt: today.toDate() },
       };
-      appointments = await AppointmentModel.find(
-        query.criteria,
-        query.options.fields
-      )
-        .populate([
-          { path: "patient", select: "_id name surname image" },
-          { path: "doctor", select: "_id name surname image" },
-          { path: "clinic", select: "_id name  image" },
-        ])
-        .skip(query.options.skip)
-        .limit(query.options.limit)
-        .sort({ startDate: 1 });
-
-      total = await AppointmentModel.countDocuments(query.criteria);
     } else {
       query.criteria = {
         patient: req.user._id,
       };
-      appointments = await AppointmentModel.find(
-        query.criteria,
-        query.options.fields
-      )
-        .populate([
-          { path: "patient", select: "_id name surname image" },
-          { path: "doctor", select: "_id name surname image" },
-          { path: "clinic", select: "_id name  image" },
-        ])
-        .skip(query.options.skip)
-        .limit(query.options.limit)
-        .sort({ startDate: 1 });
-
-      total = await AppointmentModel.countDocuments(query.criteria);
     }
+    const appointments = await AppointmentModel.find(
+      query.criteria,
+      query.options.fields
+    )
+      .populate([
+        { path: "patient", select: "_id name surname image" },
+        { path: "doctor", select: "_id name surname image" },
+        { path: "clinic", select: "_id name  image" },
+      ])
+      .skip(query.options.skip)
+      .limit(query.options.limit)
+      .sort({ startDate: 1 });
+
+    const total = await AppointmentModel.countDocuments(query.criteria);
 
     if (appointments.length > 0) {
       res
