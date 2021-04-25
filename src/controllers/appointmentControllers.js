@@ -34,10 +34,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
     const query = q2m(req.query);
     const today = moment();
 
-    let total = await AppointmentModel.countDocuments({
-      startDate: { $gte: today.toDate() },
-    });
-
+    let total;
     console.log({ total });
 
     let appointments;
@@ -54,6 +51,10 @@ const getAppointmentsForPatient = async (req, res, next) => {
         .skip(parseInt(req.query.offset))
         .limit(parseInt(req.query.limit))
         .sort({ startDate: 1 });
+
+      total = await AppointmentModel.countDocuments({
+        startDate: { $gte: today.toDate() },
+      });
     } else if (req.params.filterAppointments === "Past") {
       appointments = await AppointmentModel.find(
         query.criteria,
@@ -71,6 +72,10 @@ const getAppointmentsForPatient = async (req, res, next) => {
         .skip(query.options.skip)
         .limit(query.options.limit)
         .sort({ startDate: 1 });
+
+      total = await AppointmentModel.countDocuments({
+        startDate: { $lt: today.toDate() },
+      });
     } else {
       appointments = await AppointmentModel.find(
         query.criteria,
@@ -87,6 +92,8 @@ const getAppointmentsForPatient = async (req, res, next) => {
         .skip(query.options.skip)
         .limit(query.options.limit)
         .sort({ startDate: 1 });
+
+      total = await AppointmentModel.countDocuments(query.criteria);
     }
 
     if (appointments.length > 0) {
