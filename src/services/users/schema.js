@@ -48,7 +48,7 @@ const UserSchema = new Schema(
     phone: { type: String },
     gender: { type: String, enum: ["male", "female", "Other"] },
     birthdate: { type: String },
-    // documentId: { type: String },
+
     refreshTokens: [],
     googleId: { type: String },
     description: {
@@ -88,9 +88,6 @@ const UserSchema = new Schema(
       ],
     },
 
-    // range of provided services routes to be created
-    // address to be added
-
     rating: [
       {
         _id: false,
@@ -115,6 +112,28 @@ const UserSchema = new Schema(
       type: String,
       minlength: [3, "State needs to be at least 3 characters"],
     },
+    height: {
+      type: String,
+    },
+    weight: {
+      type: String,
+    },
+    profession: { type: String },
+    maritalStatus: { type: String, enum: ["Single", "Married"] },
+    socialNumer: { type: String },
+    foodAllergies: [{ type: String }],
+    medicineAllergies: [{ type: String }],
+    diabetes: {
+      type: String,
+      enum: ["None", "Type 1", "Type 2", "Gestational diabetes"],
+      default: "None",
+    },
+    hypertension: {
+      type: String,
+      enum: ["None", "Primary", "Secondary"],
+      default: "None",
+    },
+    surgicalInterventions: [{ type: String }],
   },
   { timestamps: true }
 );
