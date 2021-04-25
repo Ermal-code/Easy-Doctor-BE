@@ -52,6 +52,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
         .sort({ startDate: 1 });
 
       total = await AppointmentModel.countDocuments({
+        patient: req.user._id,
         startDate: { $gte: today.toDate() },
       });
     } else if (req.params.filterAppointments === "Past") {
@@ -69,26 +70,23 @@ const getAppointmentsForPatient = async (req, res, next) => {
         .sort({ startDate: 1 });
 
       total = await AppointmentModel.countDocuments({
+        patient: req.user._id,
         startDate: { $lt: today.toDate() },
       });
     } else {
-      appointments = await AppointmentModel.find(
-        query.criteria,
-        query.options.fields,
-        {
-          patient: req.user._id,
-        }
-      )
+      appointments = await AppointmentModel.find({
+        patient: req.user._id,
+      })
         .populate([
           { path: "patient", select: "_id name surname image" },
           { path: "doctor", select: "_id name surname image" },
           { path: "clinic", select: "_id name  image" },
         ])
-        .skip(query.options.skip)
-        .limit(query.options.limit)
+        .skip(parseInt(req.query.offset))
+        .limit(parseInt(req.query.limit))
         .sort({ startDate: 1 });
 
-      total = await AppointmentModel.countDocuments(query.criteria);
+      total = await AppointmentModel.countDocuments({ patient: req.user_id });
     }
 
     if (appointments.length > 0) {
