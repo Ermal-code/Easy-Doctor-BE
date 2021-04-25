@@ -24,7 +24,6 @@ const getAppointmentById = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -107,7 +106,6 @@ const getAppointmentsForPatient = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -132,7 +130,6 @@ const getAppointmentsForDoctorsOrClinics = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -224,7 +221,6 @@ const removeAppointment = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

@@ -14,7 +14,6 @@ const getReviewsForUser = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -30,7 +29,6 @@ const addReview = async (req, res, next) => {
     await review.save();
     res.status(201).send(review);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -51,7 +49,6 @@ const editReview = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -70,7 +67,6 @@ const deleteReview = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

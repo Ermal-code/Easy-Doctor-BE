@@ -27,7 +27,6 @@ const getPatientDocuments = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -80,7 +79,6 @@ const addFileForDocument = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -101,7 +99,6 @@ const editDocument = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -121,7 +118,6 @@ const deleteDocument = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

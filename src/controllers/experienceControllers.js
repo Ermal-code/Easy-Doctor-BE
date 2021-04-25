@@ -44,7 +44,6 @@ const getExperiences = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -65,7 +64,6 @@ const editExperience = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -84,7 +82,6 @@ const deleteExperience = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

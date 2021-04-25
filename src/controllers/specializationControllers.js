@@ -5,7 +5,6 @@ const getSpecializations = async (req, res, next) => {
     const specializations = await SpecializationModel.find();
     res.status(200).send(specializations);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -18,7 +17,6 @@ const addSpecialization = async (req, res, next) => {
 
     res.status(201).send(newSpecialization);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

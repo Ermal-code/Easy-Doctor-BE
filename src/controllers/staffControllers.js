@@ -50,7 +50,6 @@ const getHospitalStaff = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -69,7 +68,6 @@ const deleteHospitalStaff = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

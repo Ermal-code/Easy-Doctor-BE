@@ -20,7 +20,6 @@ const getAllUsers = async (req, res, next) => {
 
     res.status(200).send(users);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -30,7 +29,6 @@ const getUser = async (req, res, next) => {
     const user = await UserModel.findById(req.user._id);
     res.status(200).send(user);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -68,7 +66,6 @@ const getUserById = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -98,7 +95,6 @@ const getDoctorsAndClinics = async (req, res, next) => {
 
     res.status(200).send(users);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -153,7 +149,6 @@ const editUser = async (req, res, next) => {
 
     res.status(200).send(req.user);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -163,7 +158,6 @@ const deleteUser = async (req, res, next) => {
     await req.user.deleteOne();
     res.status(203).send("User deleted");
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -198,7 +192,6 @@ const loginUser = async (req, res, next) => {
       next(err);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -213,7 +206,6 @@ const logOutUser = async (req, res, next) => {
     res.clearCookie("refreshToken");
     res.send("User logged out");
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -227,7 +219,6 @@ const logOutFromAllDevices = async (req, res, next) => {
     res.clearCookie("refreshToken");
     res.send("Logged out");
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -259,7 +250,6 @@ const userRefreshToken = async (req, res, next) => {
 
       res.send("OK");
     } catch (error) {
-      console.log(error);
       const err = new Error(error);
       err.httpStatusCode = 403;
       next(err);
@@ -284,19 +274,16 @@ const googleAuth = async (req, res, next) => {
 
     res.status(200).redirect(`${process.env.FE_URL}/`);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
 
 const addProfilePicture = async (req, res, next) => {
   try {
-    console.log(req.file);
     await req.user.updateOne({ image: req.file.path });
 
     res.status(201).send(req.user);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -307,7 +294,7 @@ const addRating = async (req, res, next) => {
       _id: req.params.userId,
       "rating.user": req.user._id,
     });
-    console.log(ratingExists);
+
     if (ratingExists) {
       const modifyRating = await UserModel.findOneAndUpdate(
         {
@@ -331,7 +318,6 @@ const addRating = async (req, res, next) => {
       res.status(201).send(newRating);
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -348,7 +334,6 @@ const addAllowedUser = async (req, res, next) => {
 
     res.status(201).send(addAllowedUsers);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -361,7 +346,6 @@ const removeAllowedUser = async (req, res, next) => {
 
     res.status(203).send(removeAllowedUser);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
