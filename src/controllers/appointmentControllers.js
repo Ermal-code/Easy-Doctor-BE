@@ -93,7 +93,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
 
     if (appointments.length > 0) {
       total = appointments.length;
-      console.log(total);
+      console.log({ total });
       res
         .status(200)
         .send({ links: query.links("/appointments", total), appointments });
