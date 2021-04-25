@@ -32,9 +32,14 @@ const getAppointmentById = async (req, res, next) => {
 const getAppointmentsForPatient = async (req, res, next) => {
   try {
     const query = q2m(req.query);
-
+    let total = await AppointmentModel.countDocuments({
+      startDate: { $gte: today.toDate() },
+    });
     const today = moment();
 
+    console.log({ total });
+    console.log({ today });
+    console.log("today:", today.toDate());
     let appointments;
     if (req.params.filterAppointments === "Upcoming") {
       appointments = await AppointmentModel.find({
@@ -82,16 +87,9 @@ const getAppointmentsForPatient = async (req, res, next) => {
         .skip(query.options.skip)
         .limit(query.options.limit)
         .sort({ startDate: 1 });
-
-      console.log(
-        "appointmentssss: ",
-        appointments.filter((app) => app.patient._id !== req.user._id)
-      );
     }
 
     if (appointments.length > 0) {
-      const total = appointments.length;
-      console.log({ total });
       res
         .status(200)
         .send({ links: query.links("/appointments", total), appointments });
