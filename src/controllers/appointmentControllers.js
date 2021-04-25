@@ -34,6 +34,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
     const query = q2m(req.query);
     const total = await AppointmentModel.countDocuments(query.criteria);
     const today = moment();
+    console.log({ today });
     console.log("today:", today.toDate());
     let appointments;
     if (req.params.filterAppointments === "Upcoming") {
