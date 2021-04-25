@@ -42,8 +42,10 @@ const getAppointmentsForPatient = async (req, res, next) => {
         query.criteria,
         query.options.fields,
         {
-          patient: req.user._id,
-          startDate: { $gte: today.toDate() },
+          $and: [
+            { patient: req.user._id },
+            { startDate: { $gte: today.toDate() } },
+          ],
         }
       )
         .populate([
