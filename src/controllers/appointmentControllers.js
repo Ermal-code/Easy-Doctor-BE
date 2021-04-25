@@ -62,9 +62,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
   }
 
   if (appointments.length > 0) {
-    console.log({ appointments });
-
-    appointments
+    await appointments
       .populate([
         { path: "patient", select: "_id name surname image" },
         { path: "doctor", select: "_id name surname image" },
@@ -73,6 +71,8 @@ const getAppointmentsForPatient = async (req, res, next) => {
       .skip(query.options.skip)
       .limit(query.options.limit)
       .sort({ startDate: 1 });
+
+    console.log({ appointments });
 
     res
       .status(200)
