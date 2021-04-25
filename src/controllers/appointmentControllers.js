@@ -42,28 +42,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
           patient: req.user._id,
           startDate: { $gte: moment().format() },
         }
-      );
-    } else if (req.params.filterAppointments === "Past") {
-      appointments = await AppointmentModel.find(
-        query.criteria,
-        query.options.fields,
-        {
-          patient: req.user._id,
-          startDate: { $lt: moment().format() },
-        }
-      );
-    } else {
-      appointments = await AppointmentModel.find(
-        query.criteria,
-        query.options.fields,
-        {
-          patient: req.user._id,
-        }
-      );
-    }
-
-    if (appointments.length > 0) {
-      await appointments
+      )
         .populate([
           { path: "patient", select: "_id name surname image" },
           { path: "doctor", select: "_id name surname image" },
@@ -72,9 +51,42 @@ const getAppointmentsForPatient = async (req, res, next) => {
         .skip(query.options.skip)
         .limit(query.options.limit)
         .sort({ startDate: 1 });
+    } else if (req.params.filterAppointments === "Past") {
+      appointments = await AppointmentModel.find(
+        query.criteria,
+        query.options.fields,
+        {
+          patient: req.user._id,
+          startDate: { $lt: moment().format() },
+        }
+      )
+        .populate([
+          { path: "patient", select: "_id name surname image" },
+          { path: "doctor", select: "_id name surname image" },
+          { path: "clinic", select: "_id name  image" },
+        ])
+        .skip(query.options.skip)
+        .limit(query.options.limit)
+        .sort({ startDate: 1 });
+    } else {
+      appointments = await AppointmentModel.find(
+        query.criteria,
+        query.options.fields,
+        {
+          patient: req.user._id,
+        }
+      )
+        .populate([
+          { path: "patient", select: "_id name surname image" },
+          { path: "doctor", select: "_id name surname image" },
+          { path: "clinic", select: "_id name  image" },
+        ])
+        .skip(query.options.skip)
+        .limit(query.options.limit)
+        .sort({ startDate: 1 });
+    }
 
-      console.log({ appointments });
-
+    if (appointments.length > 0) {
       res
         .status(200)
         .send({ links: query.links("/appointments", total), appointments });
