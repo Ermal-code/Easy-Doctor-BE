@@ -60,6 +60,8 @@ const getAppointmentsForPatient = async (req, res, next) => {
       );
     }
 
+    console.log(appointments);
+
     res
       .status(200)
       .send({ links: query.links("/appointments", total), appointments });
