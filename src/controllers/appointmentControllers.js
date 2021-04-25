@@ -35,8 +35,8 @@ const getAppointmentsForPatient = async (req, res, next) => {
     const today = moment();
 
     let total;
-
     let appointments;
+
     if (req.params.filterAppointments === "Upcoming") {
       appointments = await AppointmentModel.find({
         patient: req.user._id,
@@ -55,21 +55,17 @@ const getAppointmentsForPatient = async (req, res, next) => {
         startDate: { $gte: today.toDate() },
       });
     } else if (req.params.filterAppointments === "Past") {
-      appointments = await AppointmentModel.find(
-        query.criteria,
-        query.options.fields,
-        {
-          patient: req.user._id,
-          startDate: { $lt: today.toDate() },
-        }
-      )
+      appointments = await AppointmentModel.find({
+        patient: req.user._id,
+        startDate: { $lt: today.toDate() },
+      })
         .populate([
           { path: "patient", select: "_id name surname image" },
           { path: "doctor", select: "_id name surname image" },
           { path: "clinic", select: "_id name  image" },
         ])
-        .skip(query.options.skip)
-        .limit(query.options.limit)
+        .skip(parseInt(req.query.offset))
+        .limit(parseInt(req.query.limit))
         .sort({ startDate: 1 });
 
       total = await AppointmentModel.countDocuments({
@@ -96,7 +92,6 @@ const getAppointmentsForPatient = async (req, res, next) => {
     }
 
     if (appointments.length > 0) {
-      console.log({ total });
       res
         .status(200)
         .send({ links: query.links("/appointments", total), appointments });
