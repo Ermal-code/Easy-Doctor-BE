@@ -10,7 +10,6 @@ const token = jwt.sign(payload, process.env.API_ZOOM_SECRET);
 
 const createMeeting = async (email, topic, startDate) => {
   try {
-    console.log(startDate);
     const response = await axios.post(
       `https://api.zoom.us/v2/users/${email}/meetings`,
       {
@@ -34,7 +33,6 @@ const createMeeting = async (email, topic, startDate) => {
     );
     return response.data;
   } catch (error) {
-    console.log(error);
     return error;
   }
 };

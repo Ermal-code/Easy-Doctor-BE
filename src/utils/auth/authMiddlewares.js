@@ -18,7 +18,6 @@ const authorizeUser = async (req, res, next) => {
       next();
     }
   } catch (error) {
-    console.log(error);
     const err = new Error();
     err.message = "You are not authenticated for this action";
     err.httpStatusCode = 401;

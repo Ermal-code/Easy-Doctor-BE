@@ -17,7 +17,7 @@ const authenticateUser = async (user) => {
 
     return { accessToken: newAccessToken, refreshToken: newRefreshToken };
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };
 
@@ -52,14 +52,11 @@ const refreshToken = async (oldRefreshToken) => {
     throw new Error("Access to this action is forbidden for this user");
   }
 
-  console.log("oldRefresh: ", oldRefreshToken);
-
   const currentRefreshToken = user.refreshTokens.find(
     (token) => token === oldRefreshToken
   );
 
   if (!currentRefreshToken) {
-    console.log(currentRefreshToken);
     throw new Error("Refresh token is wrong");
   }
 

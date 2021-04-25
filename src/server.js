@@ -1,5 +1,4 @@
 const express = require("express");
-const listEndpoints = require("express-list-endpoints");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const helmet = require("helmet");
@@ -49,8 +48,6 @@ server.use(notFoundErrorHandler);
 server.use(forbiddenErrorHandler);
 server.use(unauthorizedErrorHandler);
 server.use(catchAllErrorHandler);
-
-console.log(listEndpoints(server));
 
 mongoose.set("debug", true);
 
