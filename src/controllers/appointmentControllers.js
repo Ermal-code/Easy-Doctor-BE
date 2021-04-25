@@ -37,6 +37,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
     console.log("today:", today.toDate());
     let appointments;
     if (req.params.filterAppointments === "Upcoming") {
+      console.log("HIIIIIIIIIIIIIIII");
       appointments = await AppointmentModel.find(
         query.criteria,
         query.options.fields,
@@ -54,12 +55,13 @@ const getAppointmentsForPatient = async (req, res, next) => {
         .limit(query.options.limit)
         .sort({ startDate: 1 });
     } else if (req.params.filterAppointments === "Past") {
+      console.log("HOOOOOOOOOOOOOOOOOOOO");
       appointments = await AppointmentModel.find(
         query.criteria,
         query.options.fields,
         {
           patient: req.user._id,
-          startDate: { $lt: moment().format() },
+          startDate: { $lt: today.toDate() },
         }
       )
         .populate([
