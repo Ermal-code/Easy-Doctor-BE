@@ -33,31 +33,23 @@ const getAppointmentsForPatient = async (req, res, next) => {
   try {
     const query = q2m(req.query);
     const total = await AppointmentModel.countDocuments(query.criteria);
-    const today = moment().startOf("day");
+    const today = moment().format();
     console.log("today:", today.toDate());
     let appointments;
     if (req.params.filterAppointments === "Upcoming") {
-      console.log("HIIIIIIIIIIIIIIII");
-      appointments = await AppointmentModel.find(
-        query.criteria,
-        query.options.fields,
-        {
-          $and: [
-            { patient: req.user._id },
-            { startDate: { $gte: today.toDate() } },
-          ],
-        }
-      )
+      appointments = await AppointmentModel.find({
+        patient: req.user._id,
+        startDate: { $gte: today.toDate() },
+      })
         .populate([
           { path: "patient", select: "_id name surname image" },
           { path: "doctor", select: "_id name surname image" },
           { path: "clinic", select: "_id name  image" },
         ])
-        .skip(query.options.skip)
-        .limit(query.options.limit)
+        .skip(req.query.offset)
+        .limit(req.query.limit)
         .sort({ startDate: 1 });
     } else if (req.params.filterAppointments === "Past") {
-      console.log("HOOOOOOOOOOOOOOOOOOOO");
       appointments = await AppointmentModel.find(
         query.criteria,
         query.options.fields,
