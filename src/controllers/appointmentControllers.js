@@ -80,6 +80,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
         .sort({ startDate: 1 });
 
       console.log(
+        "appointments: ",
         appointments.filter((app) => app.patient._id !== req.user._id)
       );
     }
