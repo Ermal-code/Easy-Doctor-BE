@@ -9,7 +9,11 @@ const {
   removeAppointment,
 } = require("../../controllers/appointmentControllers");
 
-router.get("/patientAppointments", authorizeUser, getAppointmentsForPatient);
+router.get(
+  "/patientAppointments/:filterAppointments",
+  authorizeUser,
+  getAppointmentsForPatient
+);
 router.get(
   "/doctorOrClinicAppointments/:userId",
   getAppointmentsForDoctorsOrClinics
