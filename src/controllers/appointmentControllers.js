@@ -32,14 +32,14 @@ const getAppointmentById = async (req, res, next) => {
 const getAppointmentsForPatient = async (req, res, next) => {
   try {
     const query = q2m(req.query);
+    const today = moment();
+
     let total = await AppointmentModel.countDocuments({
       startDate: { $gte: today.toDate() },
     });
-    const today = moment();
 
     console.log({ total });
-    console.log({ today });
-    console.log("today:", today.toDate());
+
     let appointments;
     if (req.params.filterAppointments === "Upcoming") {
       appointments = await AppointmentModel.find({
