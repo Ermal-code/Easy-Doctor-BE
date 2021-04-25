@@ -40,7 +40,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
         query.options.fields,
         {
           patient: req.user._id,
-          startDate: { $gte: moment().format() },
+          startDate: { $gte: moment().format().toDate() },
         }
       )
         .populate([
