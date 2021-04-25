@@ -32,10 +32,9 @@ const getAppointmentById = async (req, res, next) => {
 const getAppointmentsForPatient = async (req, res, next) => {
   try {
     const query = q2m(req.query);
-    const total = await AppointmentModel.countDocuments(query.criteria);
+
     const today = moment();
-    console.log({ today });
-    console.log("today:", today.toDate());
+
     let appointments;
     if (req.params.filterAppointments === "Upcoming") {
       appointments = await AppointmentModel.find({
@@ -51,21 +50,17 @@ const getAppointmentsForPatient = async (req, res, next) => {
         .limit(parseInt(req.query.limit))
         .sort({ startDate: 1 });
     } else if (req.params.filterAppointments === "Past") {
-      appointments = await AppointmentModel.find(
-        query.criteria,
-        query.options.fields,
-        {
-          patient: req.user._id,
-          startDate: { $lt: today.toDate() },
-        }
-      )
+      appointments = await AppointmentModel.find({
+        patient: req.user._id,
+        startDate: { $lt: today },
+      })
         .populate([
           { path: "patient", select: "_id name surname image" },
           { path: "doctor", select: "_id name surname image" },
           { path: "clinic", select: "_id name  image" },
         ])
-        .skip(query.options.skip)
-        .limit(query.options.limit)
+        .skip(parseInt(req.query.offset))
+        .limit(parseInt(req.query.limit))
         .sort({ startDate: 1 });
     } else {
       appointments = await AppointmentModel.find(
@@ -83,9 +78,15 @@ const getAppointmentsForPatient = async (req, res, next) => {
         .skip(query.options.skip)
         .limit(query.options.limit)
         .sort({ startDate: 1 });
+
+      console.log(
+        appointments.filter((app) => app.patient._id !== req.user._id)
+      );
     }
 
     if (appointments.length > 0) {
+      const total = appointments.length;
+      console.log({ total });
       res
         .status(200)
         .send({ links: query.links("/appointments", total), appointments });
