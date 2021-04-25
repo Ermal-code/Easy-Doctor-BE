@@ -33,6 +33,11 @@ const getAppointmentsForPatient = async (req, res, next) => {
   try {
     const query = q2m(req.query);
     console.log("criteria: ", query.criteria);
+    query.criteria = {
+      patient: req.user._id,
+      startDate: { $gte: today.toDate() },
+    };
+    console.log("criteria: ", query.criteria);
     const today = moment();
 
     let total;
