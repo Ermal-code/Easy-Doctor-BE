@@ -35,7 +35,6 @@ const getAppointmentsForPatient = async (req, res, next) => {
     const today = moment();
 
     let total;
-    console.log({ total });
 
     let appointments;
     if (req.params.filterAppointments === "Upcoming") {
@@ -97,6 +96,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
     }
 
     if (appointments.length > 0) {
+      console.log({ total });
       res
         .status(200)
         .send({ links: query.links("/appointments", total), appointments });
