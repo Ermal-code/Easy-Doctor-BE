@@ -32,6 +32,7 @@ const getAppointmentById = async (req, res, next) => {
 const getAppointmentsForPatient = async (req, res, next) => {
   try {
     const query = q2m(req.query);
+    console.log(query.criteria);
     const today = moment();
 
     let total;
