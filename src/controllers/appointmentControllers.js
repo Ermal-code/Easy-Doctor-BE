@@ -47,8 +47,8 @@ const getAppointmentsForPatient = async (req, res, next) => {
           { path: "doctor", select: "_id name surname image" },
           { path: "clinic", select: "_id name  image" },
         ])
-        .skip(req.query.offset)
-        .limit(req.query.limit)
+        .skip(parseInt(req.query.offset))
+        .limit(parseInt(req.query.limit))
         .sort({ startDate: 1 });
     } else if (req.params.filterAppointments === "Past") {
       appointments = await AppointmentModel.find(
