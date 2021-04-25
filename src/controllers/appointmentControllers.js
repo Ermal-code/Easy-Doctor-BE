@@ -32,35 +32,47 @@ const getAppointmentById = async (req, res, next) => {
 const getAppointmentsForPatient = async (req, res, next) => {
   const query = q2m(req.query);
   const total = await AppointmentModel.countDocuments(query.criteria);
-  let appointments = await AppointmentModel.find(
-    query.criteria,
-    query.options.fields,
-    {
-      patient: req.user._id,
-    }
-  )
-    .populate([
-      { path: "patient", select: "_id name surname image" },
-      { path: "doctor", select: "_id name surname image" },
-      { path: "clinic", select: "_id name  image" },
-    ])
-    .skip(query.options.skip)
-    .limit(query.options.limit)
-    .sort({ startDate: 1 });
-  if (appointments.length > 0) {
-    if (req.params.filterAppointments === "Upcoming") {
-      appointments = appointments.filter(
-        (appointment) =>
-          moment(appointment.startDate).format() >= moment().format()
-      );
-    } else if (req.params.filterAppointments === "Past") {
-      appointments = appointments.filter(
-        (appointment) =>
-          moment(appointment.startDate).format() < moment().format()
-      );
-    }
+  let appointments;
+  if (req.params.filterAppointments === "Upcoming") {
+    appointments = await AppointmentModel.find(
+      query.criteria,
+      query.options.fields,
+      {
+        patient: req.user._id,
+        startDate: { $gte: moment().format() },
+      }
+    );
+  } else if (req.params.filterAppointments === "Past") {
+    appointments = await AppointmentModel.find(
+      query.criteria,
+      query.options.fields,
+      {
+        patient: req.user._id,
+        startDate: { $lt: moment().format() },
+      }
+    );
+  } else {
+    appointments = await AppointmentModel.find(
+      query.criteria,
+      query.options.fields,
+      {
+        patient: req.user._id,
+      }
+    );
+  }
 
-    console.log(appointments);
+  if (appointments.length > 0) {
+    console.log({ appointments });
+
+    appointments
+      .populate([
+        { path: "patient", select: "_id name surname image" },
+        { path: "doctor", select: "_id name surname image" },
+        { path: "clinic", select: "_id name  image" },
+      ])
+      .skip(query.options.skip)
+      .limit(query.options.limit)
+      .sort({ startDate: 1 });
 
     res
       .status(200)
