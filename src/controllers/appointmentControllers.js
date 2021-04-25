@@ -32,11 +32,9 @@ const getAppointmentById = async (req, res, next) => {
 const getAppointmentsForPatient = async (req, res, next) => {
   try {
     const query = q2m(req.query);
-    let total;
+
     const today = moment();
-    console.log({ total });
-    console.log({ today });
-    console.log("today:", today.toDate());
+
     let appointments;
     if (req.params.filterAppointments === "Upcoming") {
       appointments = await AppointmentModel.find({
@@ -92,7 +90,7 @@ const getAppointmentsForPatient = async (req, res, next) => {
     }
 
     if (appointments.length > 0) {
-      total = appointments.length;
+      const total = appointments.length;
       console.log({ total });
       res
         .status(200)
