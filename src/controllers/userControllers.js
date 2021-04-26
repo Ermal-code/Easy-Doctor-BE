@@ -206,6 +206,8 @@ const logOutUser = async (req, res, next) => {
     );
     await req.user.updateOne({ refreshTokens: newRefreshTokens });
 
+    console.log("coookieeeeee", req.cookies.refreshToken);
+
     res.clearCookie("accessToken", {
       httpOnly: true,
       path: "/",
@@ -218,7 +220,6 @@ const logOutUser = async (req, res, next) => {
       secure: true,
       sameSite: "none",
     });
-    console.log("coookieeeeee", req.cookies.refreshToken);
     console.log("coookieeeeee", req.cookies.accessToken);
     console.log("coookieeeeee", req.cookies);
     res.send("User logged out");
