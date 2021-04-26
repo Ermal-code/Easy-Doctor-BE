@@ -37,7 +37,6 @@ const getUserById = async (req, res, next) => {
   try {
     const user = await UserModel.findById(req.params.userId);
     if (user) {
-      console.log("user+++++", req.user);
       if (user.role === "patient" && !req.user) {
         const err = new Error();
         err.message = `You need to log in to view this profile`;
@@ -206,7 +205,7 @@ const logOutUser = async (req, res, next) => {
       (token) => token.refreshToken !== req.token.refreshToken
     );
     await req.user.updateOne({ refreshTokens: newRefreshTokens });
-    // req.user = null;
+
     res.clearCookie("accessToken", {
       httpOnly: true,
       path: "/",
@@ -219,7 +218,7 @@ const logOutUser = async (req, res, next) => {
       secure: true,
       sameSite: "none",
     });
-    console.log("coookieeeeee", req.cookies);
+    console.log("coookieeeeee", req.cookies.refreshToken);
     res.send("User logged out");
   } catch (error) {
     next(error);
