@@ -177,7 +177,7 @@ const loginUser = async (req, res, next) => {
         httpOnly: true,
         path: "/",
         secure: true,
-        sameSite: "none",
+
         domain: `${process.env.BE_URL}`,
       });
 
@@ -185,7 +185,7 @@ const loginUser = async (req, res, next) => {
         httpOnly: true,
         path: "/api/users/refreshToken",
         secure: true,
-        sameSite: "none",
+
         domain: `${process.env.BE_URL}`,
       });
 
