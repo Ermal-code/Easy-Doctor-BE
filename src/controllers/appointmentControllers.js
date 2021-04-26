@@ -106,49 +106,56 @@ const getAppointmentsForDoctorsOrClinics = async (req, res, next) => {
         next(err);
       }
     } else {
-      if (req.params.filterAppointments === "Upcoming") {
-        query.criteria = {
-          $or: [{ doctor: req.params.userId }, { clinic: req.params.userId }],
-          startDate: { $gte: today.toDate() },
-        };
-      } else if (req.params.filterAppointments === "Past") {
-        query.criteria = {
-          $or: [{ doctor: req.params.userId }, { clinic: req.params.userId }],
-          startDate: { $lt: today.toDate() },
-        };
-      } else if (req.params.filterAppointments === "All") {
-        query.criteria = {
-          $or: [{ doctor: req.params.userId }, { clinic: req.params.userId }],
-        };
-      }
-      appointments = await AppointmentModel.find(
-        query.criteria,
-        query.options.fields
-      )
-        .populate([
-          { path: "patient", select: "_id name surname image" },
-          { path: "doctor", select: "_id name surname image" },
-          { path: "clinic", select: "_id name  image" },
-        ])
-        .skip(query.options.skip)
-        .limit(query.options.limit)
-        .sort({ startDate: 1 });
-
-      const total = await AppointmentModel.countDocuments(query.criteria);
-
-      if (appointments.length > 0) {
-        res.status(200).send({
-          links: query.links(
-            `/doctorOrClinicAppointments/${req.params.userId}/${req.params.filterAppointments}`,
-            total
-          ),
-          appointments,
-        });
-      } else {
+      if (!req.user || (req.user && req.user._id !== req.params.userId)) {
         const err = new Error();
-        err.message = `No appointments found for id ${req.params.userId}`;
-        err.httpStatusCode = 404;
+        err.httpStatusCode = 403;
+        err.message = `You are not allowed to view these appointments`;
         next(err);
+      } else {
+        if (req.params.filterAppointments === "Upcoming") {
+          query.criteria = {
+            $or: [{ doctor: req.params.userId }, { clinic: req.params.userId }],
+            startDate: { $gte: today.toDate() },
+          };
+        } else if (req.params.filterAppointments === "Past") {
+          query.criteria = {
+            $or: [{ doctor: req.params.userId }, { clinic: req.params.userId }],
+            startDate: { $lt: today.toDate() },
+          };
+        } else if (req.params.filterAppointments === "All") {
+          query.criteria = {
+            $or: [{ doctor: req.params.userId }, { clinic: req.params.userId }],
+          };
+        }
+        appointments = await AppointmentModel.find(
+          query.criteria,
+          query.options.fields
+        )
+          .populate([
+            { path: "patient", select: "_id name surname image" },
+            { path: "doctor", select: "_id name surname image" },
+            { path: "clinic", select: "_id name  image" },
+          ])
+          .skip(query.options.skip)
+          .limit(query.options.limit)
+          .sort({ startDate: 1 });
+
+        const total = await AppointmentModel.countDocuments(query.criteria);
+
+        if (appointments.length > 0) {
+          res.status(200).send({
+            links: query.links(
+              `/doctorOrClinicAppointments/${req.params.userId}/${req.params.filterAppointments}`,
+              total
+            ),
+            appointments,
+          });
+        } else {
+          const err = new Error();
+          err.message = `No appointments found for id ${req.params.userId}`;
+          err.httpStatusCode = 404;
+          next(err);
+        }
       }
     }
   } catch (error) {
