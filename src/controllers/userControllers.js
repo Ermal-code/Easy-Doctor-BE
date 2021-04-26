@@ -289,15 +289,18 @@ const googleAuth = async (req, res, next) => {
 
     res.status(200).redirect(`${process.env.FE_URL}/`);
   } catch (error) {
-    if (error.name === "MongoError") {
-      next({
-        httpStatusCode: 400,
-        message: `This email already has an account`,
-      });
-    } else {
-      error.httpStatusCode = 500;
-      next(error);
-    }
+    // if (error.name === "MongoError") {
+    //   next({
+    //     httpStatusCode: 400,
+    //     message: `This email already has an account`,
+    //   });
+    // } else {
+    //   error.httpStatusCode = 500;
+    //   next(error);
+    // }
+    error.httpStatusCode === 400;
+    console.log(error);
+    next(error);
   }
 };
 
