@@ -134,8 +134,12 @@ const addNewUser = async (req, res, next) => {
       );
 
       next({ httpStatusCode: error.httpStatusCode, errors: errorArray });
-    } else {
+    } else if (error.name === "MongoError") {
       error.httpStatusCode = 400;
+      error.message = `This email already has an account`;
+      next(error);
+    } else {
+      error.httpStatusCode = 500;
       next(error);
     }
   }
