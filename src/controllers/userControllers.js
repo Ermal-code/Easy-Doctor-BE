@@ -178,7 +178,6 @@ const loginUser = async (req, res, next) => {
         path: "/",
         secure: true,
         sameSite: "none",
-        domain: `${process.env.FE_URL}`,
       });
 
       res.cookie("refreshToken", refreshToken, {
@@ -186,7 +185,6 @@ const loginUser = async (req, res, next) => {
         path: "/api/users/refreshToken",
         secure: true,
         sameSite: "none",
-        domain: `${process.env.FE_URL}`,
       });
 
       res.status(201).send(user);
@@ -209,12 +207,16 @@ const logOutUser = async (req, res, next) => {
     await req.user.updateOne({ refreshTokens: newRefreshTokens });
 
     res.clearCookie("accessToken", {
+      httpOnly: true,
       path: "/",
-      domain: `${process.env.FE_URL}`,
+      secure: true,
+      sameSite: "none",
     });
     res.clearCookie("refreshToken", {
+      httpOnly: true,
       path: "/api/users/refreshToken",
-      domain: `${process.env.FE_URL}`,
+      secure: true,
+      sameSite: "none",
     });
 
     console.log("coookieeeeee", req.cookies.accessToken);
