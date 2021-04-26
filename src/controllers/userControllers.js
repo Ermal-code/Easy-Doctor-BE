@@ -219,6 +219,8 @@ const logOutUser = async (req, res, next) => {
       sameSite: "none",
     });
     console.log("coookieeeeee", req.cookies.refreshToken);
+    console.log("coookieeeeee", req.cookies.accessToken);
+    console.log("coookieeeeee", req.cookies);
     res.send("User logged out");
   } catch (error) {
     next(error);
