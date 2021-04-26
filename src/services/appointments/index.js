@@ -15,7 +15,7 @@ router.get(
   getAppointmentsForPatient
 );
 router.get(
-  "/doctorOrClinicAppointments/:userId",
+  "/doctorOrClinicAppointments/:userId/:filterAppointments",
   getAppointmentsForDoctorsOrClinics
 );
 router.get("/:appointmentId", authorizeUser, getAppointmentById);
