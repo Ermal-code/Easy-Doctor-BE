@@ -206,8 +206,10 @@ const logOutUser = async (req, res, next) => {
       (token) => token.refreshToken !== req.token.refreshToken
     );
     await req.user.updateOne({ refreshTokens: newRefreshTokens });
+    // req.user = null;
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
+    console.log("coookieeeeee", req.cookies);
     res.send("User logged out");
   } catch (error) {
     next(error);
