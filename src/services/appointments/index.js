@@ -5,7 +5,6 @@ const {
   getAppointmentById,
   getAppointmentsForPatient,
   getAppointmentsForDoctorsOrClinics,
-  getDoctorsOrClinicAppointmentsByPatient,
   addAppointment,
   removeAppointment,
 } = require("../../controllers/appointmentControllers");
@@ -19,12 +18,6 @@ router.get(
   "/doctorOrClinicAppointments/:userId/:filterAppointments",
   authorizeUser,
   getAppointmentsForDoctorsOrClinics
-);
-
-router.get(
-  "/doctorOrClinicAppointmentsByPatient/:patientId/:filterAppointments",
-  authorizeUser,
-  getDoctorsOrClinicAppointmentsByPatient
 );
 
 router.get("/:appointmentId", authorizeUser, getAppointmentById);

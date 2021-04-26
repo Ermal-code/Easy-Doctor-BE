@@ -156,63 +156,63 @@ const getAppointmentsForDoctorsOrClinics = async (req, res, next) => {
   }
 };
 
-const getDoctorsOrClinicAppointmentsByPatient = async (req, res, next) => {
-  try {
-    const query = q2m(req.query);
-    const today = moment();
+// const getDoctorsOrClinicAppointmentsByPatient = async (req, res, next) => {
+//   try {
+//     const query = q2m(req.query);
+//     const today = moment();
 
-    if (req.params.filterAppointments === "Upcoming") {
-      query.criteria = {
-        $or: [{ doctor: req.user._id }, { clinic: req.user._id }],
-        patient: req.params.patientId,
-        startDate: { $gte: today.toDate() },
-      };
-    } else if (req.params.filterAppointments === "Past") {
-      query.criteria = {
-        $or: [{ doctor: req.user._id }, { clinic: req.user._id }],
-        patient: req.params.patientId,
-        startDate: { $lt: today.toDate() },
-      };
-    } else {
-      query.criteria = {
-        $or: [{ doctor: req.user._id }, { clinic: req.user._id }],
-        patient: req.params.patientId,
-      };
-    }
+//     if (req.params.filterAppointments === "Upcoming") {
+//       query.criteria = {
+//         $or: [{ doctor: req.user._id }, { clinic: req.user._id }],
+//         patient: req.params.patientId,
+//         startDate: { $gte: today.toDate() },
+//       };
+//     } else if (req.params.filterAppointments === "Past") {
+//       query.criteria = {
+//         $or: [{ doctor: req.user._id }, { clinic: req.user._id }],
+//         patient: req.params.patientId,
+//         startDate: { $lt: today.toDate() },
+//       };
+//     } else {
+//       query.criteria = {
+//         $or: [{ doctor: req.user._id }, { clinic: req.user._id }],
+//         patient: req.params.patientId,
+//       };
+//     }
 
-    const appointments = await AppointmentModel.find(
-      query.criteria,
-      query.options.fields
-    )
-      .populate([
-        { path: "patient", select: "_id name surname image" },
-        { path: "doctor", select: "_id name surname image" },
-        { path: "clinic", select: "_id name  image" },
-      ])
-      .skip(query.options.skip)
-      .limit(query.options.limit)
-      .sort({ startDate: 1 });
+//     const appointments = await AppointmentModel.find(
+//       query.criteria,
+//       query.options.fields
+//     )
+//       .populate([
+//         { path: "patient", select: "_id name surname image" },
+//         { path: "doctor", select: "_id name surname image" },
+//         { path: "clinic", select: "_id name  image" },
+//       ])
+//       .skip(query.options.skip)
+//       .limit(query.options.limit)
+//       .sort({ startDate: 1 });
 
-    const total = await AppointmentModel.countDocuments(query.criteria);
+//     const total = await AppointmentModel.countDocuments(query.criteria);
 
-    if (appointments.length > 0) {
-      res.status(200).send({
-        links: query.links(
-          `/doctorOrClinicAppointmentsByPatient/${req.params.patientId}/${req.params.filterAppointments}`,
-          total
-        ),
-        appointments,
-      });
-    } else {
-      const err = new Error();
-      err.message = `This patient's appointments not found`;
-      err.httpStatusCode = 404;
-      next(err);
-    }
-  } catch (error) {
-    next(error);
-  }
-};
+//     if (appointments.length > 0) {
+//       res.status(200).send({
+//         links: query.links(
+//           `/doctorOrClinicAppointmentsByPatient/${req.params.patientId}/${req.params.filterAppointments}`,
+//           total
+//         ),
+//         appointments,
+//       });
+//     } else {
+//       const err = new Error();
+//       err.message = `This patient's appointments not found`;
+//       err.httpStatusCode = 404;
+//       next(err);
+//     }
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 const addAppointment = async (req, res, next) => {
   try {
@@ -309,7 +309,7 @@ module.exports = {
   getAppointmentById,
   getAppointmentsForPatient,
   getAppointmentsForDoctorsOrClinics,
-  getDoctorsOrClinicAppointmentsByPatient,
+  // getDoctorsOrClinicAppointmentsByPatient,
   addAppointment,
   removeAppointment,
 };
