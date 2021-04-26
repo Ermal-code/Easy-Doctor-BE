@@ -37,6 +37,7 @@ const getUserById = async (req, res, next) => {
   try {
     const user = await UserModel.findById(req.params.userId);
     if (user) {
+      console.log("user+++++", req.user);
       if (user.role === "patient" && !req.user) {
         const err = new Error();
         err.message = `You need to log in to view this profile`;
@@ -84,8 +85,6 @@ const getDoctorsAndClinics = async (req, res, next) => {
           },
           { $or: [{ role: "doctor" }, { role: "clinic" }] },
         ],
-
-        // ,
       }).collation({ locale: "en", strength: 2 });
     } else {
       users = await UserModel.find({
