@@ -206,19 +206,13 @@ const logOutUser = async (req, res, next) => {
     );
     await req.user.updateOne({ refreshTokens: newRefreshTokens });
 
-    console.log("coookieeeeee", req.cookies.refreshToken);
-
     res.clearCookie("accessToken", {
-      httpOnly: true,
       path: "/",
-      secure: true,
-      sameSite: "none",
+      domain: `${process.env.BE_URL}`,
     });
     res.clearCookie("refreshToken", {
-      httpOnly: true,
       path: "/api/users/refreshToken",
-      secure: true,
-      sameSite: "none",
+      domain: `${process.env.BE_URL}`,
     });
     console.log("coookieeeeee", req.cookies.accessToken);
     console.log("coookieeeeee", req.cookies);
