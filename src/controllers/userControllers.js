@@ -178,6 +178,7 @@ const loginUser = async (req, res, next) => {
         path: "/",
         secure: true,
         sameSite: "none",
+        domain: `${process.env.BE_URL}`,
       });
 
       res.cookie("refreshToken", refreshToken, {
@@ -185,6 +186,7 @@ const loginUser = async (req, res, next) => {
         path: "/api/users/refreshToken",
         secure: true,
         sameSite: "none",
+        domain: `${process.env.BE_URL}`,
       });
 
       res.status(201).send(user);
@@ -214,6 +216,7 @@ const logOutUser = async (req, res, next) => {
       path: "/api/users/refreshToken",
       domain: `${process.env.BE_URL}`,
     });
+
     console.log("coookieeeeee", req.cookies.accessToken);
     console.log("coookieeeeee", req.cookies);
     res.send("User logged out");
