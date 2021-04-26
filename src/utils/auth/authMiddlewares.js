@@ -5,7 +5,6 @@ const authorizeUser = async (req, res, next) => {
   try {
     const token = req.cookies.accessToken;
 
-    console.log({ token });
     const decoded = await verifyJWT(token, process.env.JWT_SECRET);
 
     const user = await UserModel.findOne({ _id: decoded._id });
@@ -29,7 +28,6 @@ const authorizeUser = async (req, res, next) => {
 const authorzieUserForViewingPatientProfile = async (req, res, next) => {
   try {
     const token = req.cookies.accessToken;
-    console.log({ token });
 
     const decoded = await verifyJWT(token, process.env.JWT_SECRET);
 
