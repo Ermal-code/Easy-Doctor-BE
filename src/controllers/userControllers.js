@@ -135,7 +135,7 @@ const addNewUser = async (req, res, next) => {
 
       next({ httpStatusCode: error.httpStatusCode, errors: errorArray });
     } else {
-      error.httpStatusCode = 500;
+      error.httpStatusCode = 400;
       next(error);
     }
   }
