@@ -84,7 +84,7 @@ const UserSchema = new Schema(
         function () {
           return this.role === "doctor";
         },
-        "Clinic or hospital that user works for is required",
+        "Hospital or clinic is required",
       ],
     },
 
