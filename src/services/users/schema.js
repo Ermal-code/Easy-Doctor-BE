@@ -76,7 +76,20 @@ const UserSchema = new Schema(
         endHour: { type: String },
       },
     ],
-    specialization: [{ type: String }],
+    specialization: {
+      type: Array,
+      required: [
+        function () {
+          return this.role === "doctor" || this.role === "clinic";
+        },
+        "Specialization is required",
+      ],
+      validate: {
+        validator: function (array) {
+          return array.every((v) => typeof v === "string");
+        },
+      },
+    },
 
     clinicOrHospital: {
       type: String,
