@@ -252,9 +252,9 @@ const addAppointment = async (req, res, next) => {
 
       sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-      const emailArray = emailArray(clinic, patient, doctor, req, response);
+      const arrayOfEmails = emailArray(clinic, patient, doctor, req, response);
 
-      await sgMail.send(emailArray);
+      await sgMail.send(arrayOfEmails);
 
       res.status(201).send({ newAppointment, response });
     } else {
