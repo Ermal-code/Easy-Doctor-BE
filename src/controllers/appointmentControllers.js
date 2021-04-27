@@ -252,19 +252,58 @@ const addAppointment = async (req, res, next) => {
 
       sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-      await sgMail.send([
-        emailMessage(
-          patient.email,
-          false,
-          req,
-          patient,
-          doctor,
-          response,
-          false
-        ),
-        emailMessage(doctor.email, true, req, patient, doctor, response, false),
-        emailMessage(clinic.email, false, req, patient, doctor, response, true),
-      ]);
+      let emailArray = clinic
+        ? [
+            emailMessage(
+              patient.email,
+              false,
+              req,
+              patient,
+              doctor,
+              response,
+              false
+            ),
+            emailMessage(
+              doctor.email,
+              true,
+              req,
+              patient,
+              doctor,
+              response,
+              false
+            ),
+            emailMessage(
+              clinic.email,
+              false,
+              req,
+              patient,
+              doctor,
+              response,
+              true
+            ),
+          ]
+        : [
+            emailMessage(
+              patient.email,
+              false,
+              req,
+              patient,
+              doctor,
+              response,
+              false
+            ),
+            emailMessage(
+              doctor.email,
+              true,
+              req,
+              patient,
+              doctor,
+              response,
+              false
+            ),
+          ];
+
+      await sgMail.send(emailArray);
 
       res.status(201).send({ newAppointment, response });
     } else {
