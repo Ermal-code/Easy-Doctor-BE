@@ -106,7 +106,10 @@ const getAppointmentsForDoctorsOrClinics = async (req, res, next) => {
         next(err);
       }
     } else {
-      if (!req.user || (req.user && req.user._id !== req.params.userId)) {
+      if (
+        !req.user ||
+        (req.user && req.user._id.toString() !== req.params.userId.toString())
+      ) {
         const err = new Error();
         err.httpStatusCode = 403;
         err.message = `You are not allowed to view these appointments`;
