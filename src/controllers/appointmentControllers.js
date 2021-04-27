@@ -3,7 +3,7 @@ const AppointmentModel = require("../services/appointments/schema");
 const UserModel = require("../services/users/schema");
 const { createMeeting } = require("../utils/zoomMeetingCreation");
 const sgMail = require("@sendgrid/mail");
-const { emailMessage } = require("../utils/sgMail");
+const { emailArray } = require("../utils/sgMail");
 const q2m = require("query-to-mongo");
 
 const getAppointmentById = async (req, res, next) => {
@@ -252,56 +252,7 @@ const addAppointment = async (req, res, next) => {
 
       sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-      let emailArray = clinic
-        ? [
-            emailMessage(
-              patient.email,
-              false,
-              req,
-              patient,
-              doctor,
-              response,
-              false
-            ),
-            emailMessage(
-              doctor.email,
-              true,
-              req,
-              patient,
-              doctor,
-              response,
-              false
-            ),
-            emailMessage(
-              clinic.email,
-              false,
-              req,
-              patient,
-              doctor,
-              response,
-              true
-            ),
-          ]
-        : [
-            emailMessage(
-              patient.email,
-              false,
-              req,
-              patient,
-              doctor,
-              response,
-              false
-            ),
-            emailMessage(
-              doctor.email,
-              true,
-              req,
-              patient,
-              doctor,
-              response,
-              false
-            ),
-          ];
+      const emailArray = emailArray(clinic, patient, doctor, req, response);
 
       await sgMail.send(emailArray);
 

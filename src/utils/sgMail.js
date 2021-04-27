@@ -60,4 +60,35 @@ const emailMessage = (
   return msg;
 };
 
-module.exports = { emailMessage };
+const emailArray = (clinic, patient, doctor, req, response) => {
+  let emailArray = clinic
+    ? [
+        emailMessage(
+          patient.email,
+          false,
+          req,
+          patient,
+          doctor,
+          response,
+          false
+        ),
+        emailMessage(doctor.email, true, req, patient, doctor, response, false),
+        emailMessage(clinic.email, false, req, patient, doctor, response, true),
+      ]
+    : [
+        emailMessage(
+          patient.email,
+          false,
+          req,
+          patient,
+          doctor,
+          response,
+          false
+        ),
+        emailMessage(doctor.email, true, req, patient, doctor, response, false),
+      ];
+
+  return emailArray;
+};
+
+module.exports = { emailArray };
