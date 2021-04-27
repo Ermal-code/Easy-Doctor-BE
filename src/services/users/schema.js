@@ -88,6 +88,7 @@ const UserSchema = new Schema(
         validator: function (array) {
           return array.every((v) => typeof v === "string");
         },
+        message: "Specialization is required",
       },
     },
 
