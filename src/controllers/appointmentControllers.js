@@ -110,6 +110,7 @@ const getAppointmentsForDoctorsOrClinics = async (req, res, next) => {
         !req.user ||
         (req.user && req.user._id.toString() !== req.params.userId.toString())
       ) {
+        console.log(req.user._id.toString());
         const err = new Error();
         err.httpStatusCode = 403;
         err.message = `You are not allowed to view these appointments`;
