@@ -173,7 +173,7 @@ const loginUser = async (req, res, next) => {
     if (user) {
       console.log({ user });
       const { accessToken, refreshToken } = await authenticateUser(user);
-
+      console.log({ accessToken, refreshToken });
       res.cookie("accessToken", accessToken, {
         httpOnly: true,
         path: "/",
