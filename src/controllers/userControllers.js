@@ -171,6 +171,7 @@ const loginUser = async (req, res, next) => {
 
     const user = await UserModel.findByCredentials(email, password);
     if (user) {
+      console.log({ user });
       const { accessToken, refreshToken } = await authenticateUser(user);
 
       res.cookie("accessToken", accessToken, {
