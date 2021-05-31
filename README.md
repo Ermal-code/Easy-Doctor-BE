@@ -171,3 +171,27 @@ const UserSchema = new Schema(
 ```
 
 </details>
+
+<details>
+
+<summary><b> Staff endpoint </b></summary>
+
+<p>This endpoint is for clinics or hospital to add doctors as their staff members. It's basic CRUD endpoint</p>
+
+<p>Staff schema: </p>
+
+```javascript
+const StaffMemberSchema = new Schema({
+  hospital: {
+    type: Schema.Types.ObjectId,
+    required: [true, "Hospital id is required"],
+  },
+  doctor: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: [true, "Doctor is required"],
+  },
+});
+```
+
+</details>
