@@ -286,6 +286,8 @@ const DocumentSchema = new Schema({
 
 </details>
 
+<details>
+
 <summary><b> Appointment endpoints </b></summary>
 
 <p>Through these endpoints patient can make an appointment. On the moments that appointment is booked successfuly patient,doctor and clinc will recieve an email with details. Emails are send using sandgrid. If the appointment is online it will be held on Zoom using Zoom API. You can find email and zoom configurations under utils folder!</p>
