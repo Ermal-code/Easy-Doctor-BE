@@ -6,7 +6,7 @@
 <p>This repo is for the backend of the project, which was done using NodeJs, expressJs. Also for image upload I used cloudinary and for the online appointments I used the Zoom API. </p>
 <details>
 
-<summary><b> Users endpoints </b></summary>
+<summary><b> Users</b></summary>
 <br/>
 
 <p>In this project there are 4 types of users: admin, patients, doctors and clinics/hospitals. All of these users use the same mongo schema. Also this app includes auth/oauth implementation using jwt token strategy. Cookies are used to save the access token and refresh token.</p>
@@ -174,7 +174,7 @@ const UserSchema = new Schema(
 
 <details>
 
-<summary><b> Staff endpoints </b></summary>
+<summary><b> Staff</b></summary>
 
 <p>It's a basic CRUD for clinics or hospital to add doctors as their staff members.</p>
 
@@ -198,7 +198,7 @@ const StaffMemberSchema = new Schema({
 
 <details>
 
-<summary><b> Review endpoints </b></summary>
+<summary><b> Reviews </b></summary>
 
 <p>Through these endpoints users can add, remove, edit or delete their review.</p>
 
@@ -219,7 +219,7 @@ const ReviewSchema = new Schema(
 
 <details>
 
-<summary><b> Experience endpoints </b></summary>
+<summary><b> Experiences </b></summary>
 
 <p>Through these endpoints doctors can add, remove, edit or delete their experiences.</p>
 
@@ -240,7 +240,7 @@ const ExperienceSchema = new Schema({
 
 <details>
 
-<summary><b> Education endpoints </b></summary>
+<summary><b> Educations </b></summary>
 
 <p>Through these endpoints doctors can add, remove, edit or delete their education.</p>
 
@@ -266,7 +266,7 @@ const EducationSchema = new Schema({
 
 <details>
 
-<summary><b> Document endpoints </b></summary>
+<summary><b> Documents </b></summary>
 
 <p>Through these endpoints patient can add, remove, edit or delete their documents. Cloudinary is used for storage of the documents and multer is used as a middleware for uploading documents as images</p>
 
@@ -288,7 +288,7 @@ const DocumentSchema = new Schema({
 
 <details>
 
-<summary><b> Appointment endpoints </b></summary>
+<summary><b> Appointments </b></summary>
 
 <p>Through these endpoints patient can make an appointment. On the moments that appointment is booked successfuly patient,doctor and clinc will recieve an email with details. Emails are send using sandgrid. If the appointment is online it will be held on Zoom using Zoom API. You can find email and zoom configurations under utils folder!</p>
 
