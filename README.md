@@ -6,7 +6,7 @@
 <p>This repo is for the backend of the project, which was done using NodeJs, expressJs. Also for image upload I used cloudinary and for the online appointments I used the Zoom API. </p>
 <details>
 
-<summary><b> Users endpoint </b></summary>
+<summary><b> Users endpoints </b></summary>
 <br/>
 
 <p>In this project there are 4 types of users: admin, patients, doctors and clinics/hospitals. All of these users use the same mongo schema. Also this app includes auth/oauth implementation using jwt token strategy. Cookies are used to save the access token and refresh token.</p>
@@ -174,9 +174,9 @@ const UserSchema = new Schema(
 
 <details>
 
-<summary><b> Staff endpoint </b></summary>
+<summary><b> Staff endpoints </b></summary>
 
-<p>This endpoint is for clinics or hospital to add doctors as their staff members. It's basic CRUD endpoint</p>
+<p>It's a basic CRUD for clinics or hospital to add doctors as their staff members.</p>
 
 <p>Staff schema: </p>
 
@@ -191,6 +191,48 @@ const StaffMemberSchema = new Schema({
     ref: "User",
     required: [true, "Doctor is required"],
   },
+});
+```
+
+</details>
+
+<details>
+
+<summary><b> Review endpoints </b></summary>
+
+<p>Through these endpoints users can add, remove, edit or delete their review.</p>
+
+<p>Review schema: </p>
+
+```javascript
+const ReviewSchema = new Schema(
+  {
+    reviewedUser: { type: Schema.Types.ObjectId, required: true },
+    reviewUser: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    text: { type: String, required: true },
+  },
+  { timestamps: true }
+);
+```
+
+</details>
+
+<details>
+
+<summary><b> Experience endpoints </b></summary>
+
+<p>Through these endpoints doctors can add, remove, edit or delete their experiences.</p>
+
+<p>Experience schema: </p>
+
+```javascript
+const ExperienceSchema = new Schema({
+  role: { type: String, required: [true, "Role that you had is required"] },
+  company: { type: String, required: [true, "Hospital or clinic is required"] },
+  startDate: { type: Date, required: [true, "Start date is required"] },
+  endDate: { type: Date },
+  area: { type: String },
+  user: { type: Schema.Types.ObjectId, required: true },
 });
 ```
 
