@@ -237,3 +237,78 @@ const ExperienceSchema = new Schema({
 ```
 
 </details>
+
+<details>
+
+<summary><b> Education endpoints </b></summary>
+
+<p>Through these endpoints doctors can add, remove, edit or delete their education.</p>
+
+<p>Education schema: </p>
+
+```javascript
+const EducationSchema = new Schema({
+  type: {
+    type: String,
+    required: [true, "Type of education is required"],
+    enum: ["High school", "University", "Specialization"],
+  },
+  school: { type: String, required: [true, "Name of school is required"] },
+  startDate: { type: Date, required: [true, "Start date is required"] },
+  endDate: { type: Date },
+  degree: { type: String },
+  area: { type: String },
+  user: { type: Schema.Types.ObjectId, required: true },
+});
+```
+
+</details>
+
+<details>
+
+<summary><b> Document endpoints </b></summary>
+
+<p>Through these endpoints patient can add, remove, edit or delete their documents. Cloudinary is used for storage of the documents and multer is used as a middleware for uploading documents as images</p>
+
+<p>Document schema: </p>
+
+```javascript
+const DocumentSchema = new Schema({
+  title: {
+    type: String,
+    required: [true, "A title for the document is required"],
+  },
+  file: { type: String },
+  description: { type: String },
+  patient: { type: Schema.Types.ObjectId, ref: "User" },
+});
+```
+
+</details>
+
+<summary><b> Appointment endpoints </b></summary>
+
+<p>Through these endpoints patient can make an appointment. On the moments that appointment is booked successfuly patient,doctor and clinc will recieve an email with details. Emails are send using sandgrid. If the appointment is online it will be held on Zoom using Zoom API. You can find email and zoom configurations under utils folder!</p>
+
+<p>Appointment schema: </p>
+
+```javascript
+const AppointmentSchema = new Schema(
+  {
+    startDate: { type: Date, required: "Start time is required" },
+    endDate: { type: Date, required: true },
+    type: {
+      type: String,
+      enum: ["online", "on-site"],
+      required: "Type of appointment is required",
+    },
+    doctor: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    clinic: { type: Schema.Types.ObjectId, ref: "User" },
+    patient: { type: Schema.Types.ObjectId, ref: "User" },
+    reason: { type: String, required: "Reason for visit is required" },
+  },
+  { timestamps: true }
+);
+```
+
+</details>
