@@ -67,7 +67,7 @@ server.use(forbiddenErrorHandler)
 server.use(unauthorizedErrorHandler)
 server.use(catchAllErrorHandler)
 
-mongoose.set("debug", true)
+if (process.env.DEBUG_FLAG === "true") mongoose.set("debug", true)
 
 mongoose
     .connect(process.env.MONGO_CONNECTION, {
