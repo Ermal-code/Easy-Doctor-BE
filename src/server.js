@@ -23,7 +23,7 @@ const services = require("./services")
 const server = express()
 
 const sess = {
-    secret: "keyboard cat",
+    secret: process.env.SESSION_SECRET,
     resave: false, // don't save session if unmodified
     saveUninitialized: false, // don't create session until something stored
     store: new SQLiteStore(),
@@ -32,7 +32,9 @@ const sess = {
 if (server.get("env") === "production") {
     server.set("trust proxy", 1) // trust first proxy
     server.enable("trust proxy")
-    sess.cookie.secure = true // serve secure cookies
+    sess.cookie = {
+        secure: true,
+    } // serve secure cookies
 }
 
 const port = process.env.PORT || 3003
@@ -71,7 +73,6 @@ mongoose
     .connect(process.env.MONGO_CONNECTION, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useCreateIndex: true,
     })
     .then(server.listen(port, () => console.log("Running on port", port)))
     .catch((err) => console.log(err))
